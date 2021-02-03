@@ -1,5 +1,5 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, UserInputError } = require('apollo-server-express');
 const fs = require('fs');
 const { getMaxListeners } = require('process');
 
@@ -21,8 +21,10 @@ const resolvers = {
     },
 };
 
-function setUserInfo(_, { userInfo }) {
-  return allUserInfo.push(userInfo);
+function setUserInfo(_, { info }) {
+  validateUserInfo(info);
+  allUserInfo.push(info);
+  return info;
 }
 
 function getUserInfo() {
@@ -32,6 +34,19 @@ const server = new ApolloServer({
     typeDefs: fs.readFileSync('./schema.graphql', 'utf-8'),
     resolvers,
 })
+
+function validateUserInfo(info) {
+    console.log(info);
+    const errors = [];
+    const emailExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    const isValidEmail =  emailExpression.test(String(info.email).toLowerCase())
+    if (!isValidEmail) errors.push('Please enter a valid email');
+
+    if (errors.length > 0) {
+        throw new UserInputError('Invalid input(s)', { errors });
+    }
+}
 
 const app = express();
 
