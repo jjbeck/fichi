@@ -1,0 +1,27 @@
+
+"""Initial user info schema"""
+type UserInfo {
+  email: String!
+  fname: String!
+  lname: String!
+  age: Int
+}
+
+input SetUSERINFO {
+  email: String!
+  fname: String!
+  lname: String!
+  age: Int
+}
+
+
+##### Top level declarations
+
+type Query {
+  getUserInfo: [UserInfo!]!
+}
+
+type Mutation {
+  setUserInfo(info: SetUSERINFO!): UserInfo!
+}
+
