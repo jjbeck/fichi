@@ -1,6 +1,10 @@
+##### Custom scalar for user aquire date
+scalar UserAquireDate
 
 """Initial user info schema"""
 type UserInfo {
+  id: Int!
+  signUpDate: UserAquireDate!
   email: String!
   fname: String!
   lname: String!
