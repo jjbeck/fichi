@@ -45,7 +45,11 @@ function getUserInfo() {
 const server = new ApolloServer({
     typeDefs: fs.readFileSync('./schema.graphql', 'utf-8'),
     resolvers,
-})
+    formatError: error => {
+        console.log(error);
+        return error;
+    },
+});
 
 function validateUserInfo(info) {
     const errors = [];
