@@ -1,6 +1,8 @@
 import React from 'react';
-
-import SignUpForm from './signUpEmail.jsx';
+import NavBarComponent from './components/navbar/navbar.component.jsx';
+import IntroContainer from './containers/intro/intro.container.jsx';
+import HowItWorksContainer from './containers/how-it-works/how-it-works.container.jsx';
+import './global.css';
 
 export default class LandingPage extends React.Component {
   constructor() {
@@ -13,11 +15,10 @@ export default class LandingPage extends React.Component {
   render() {
     return (
       <div>
-        <h2>
-          This person has not signed up
-        </h2>
-        <SignUpForm />
+        <NavBarComponent />
+        <IntroContainer />
+        <HowItWorksContainer/>
       </div>
-      )
+    )
   }
 };

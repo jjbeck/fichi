@@ -1,4 +1,5 @@
 const path = require('path');
+// import css from "file.css";
 
 module.exports = {
   mode: 'development',
@@ -14,12 +15,28 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader',
       },
-    ],
+      {
+        test: /\.css$/i,
+        use: [
+          {
+            loader: 'style-loader',
+            options: { injectType: 'singletonStyleTag' },
+          },
+          'css-loader',
+        ],
+      },
+      {
+        test: /\.(jpg|png)$/,
+        use: {
+          loader: 'url-loader',
+        },
+      },
+    ]
   },
   optimization: {
     splitChunks: {
       name: 'vendor',
       chunks: 'all',
     },
-  },
+  }
 };

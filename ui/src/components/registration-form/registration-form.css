@@ -1,0 +1,60 @@
+button {
+    bottom: 50px;
+    padding: 10px 30px;
+    border: 2px solid var(--main-purple);
+    color: var(--main-purple);
+    background: var(--main-white);
+    border-radius: 7px;
+    width: 25%;
+    position: absolute;
+    margin-bottom: 10px;
+}
+button:hover{
+    background: var(--main-purple);
+    color: var(--main-white);
+    border: 1px solid var(--main-purple);
+}
+.form-wrapper {
+    width: 50%;
+    box-shadow: 5px 5px 10px 0px rgba(255,255,255,0.5);
+    border: 2px solid var(--main-purple);
+    height: 100%;
+    position: absolute;
+    background: #fff;
+    padding: 20px 35px;
+    height: 85%;
+}
+h3{
+    color: var(--main-purple);
+}
+.form-hidden{
+    transition: .2s ease-in-out;
+    top: 50px;
+    opacity: 0;
+}
+.form-shown{
+    opacity: 1;
+    transition: .3s ease-in-out;
+    top: 10px;
+}
+form {
+    /* opacity: 0px; */
+    top: 20px;
+}
+form, input {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: 1px solid var(--main-purple);
+    border-radius: 5px;
+}
+input[name="role"] {
+    width: auto;
+    border: none;
+}
+.role-wrapper{
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
