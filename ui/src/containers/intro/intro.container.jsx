@@ -3,8 +3,6 @@ import RegistrationFormContainer from '../../components/registration-form/regist
 import './intro.css';
 
 export default class IntroContainer extends React.Component {
-     
-
     render() {
         return (
             <>
