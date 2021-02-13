@@ -11,8 +11,9 @@
 }
 .panel {
     width: 45%;
-    background-size: 500px 400px;
+    background-size: cover;
     background-repeat: no-repeat;
+    box-shadow: 0px 10px 15px 0px #ccc;
 }
 .left{
     background-image: url("../../assets/images/pexels-ketut-subiyanto-4473622.jpg");

@@ -1,18 +1,31 @@
-button {
-    bottom: 50px;
-    padding: 10px 30px;
+.valid-email{
     border: 2px solid var(--main-purple);
     color: var(--main-purple);
     background: var(--main-white);
-    border-radius: 7px;
-    width: 25%;
-    position: absolute;
-    margin-bottom: 10px;
+    transition: .5s ease-in-out;
 }
-button:hover{
+.valid-email:hover{
     background: var(--main-purple);
     color: var(--main-white);
     border: 1px solid var(--main-purple);
+    transition: .5s ease-in-out;
+}
+.invalid-email{
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    cursor: not-allowed;
+    transition: .5s ease-in-out;
+}
+button {
+    padding: 10px 30px;
+    border-radius: 7px;
+    transition: .5s ease-in-out;
+}
+input[name="email"]{
+    width: 25%;
+    padding: 10px 15px;
+    z-index: 99999;
 }
 .form-wrapper {
     width: 50%;
@@ -23,6 +36,13 @@ button:hover{
     background: #fff;
     padding: 20px 35px;
     height: 85%;
+}
+.intro-email-form{
+    position: absolute;
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    bottom: 20px;
 }
 h3{
     color: var(--main-purple);

@@ -25,12 +25,23 @@ module.exports = {
           'css-loader',
         ],
       },
+      // {
+      //   test: /\.(jpg|png)$/,
+      //   use: {
+      //     loader: 'url-loader',
+      //   },
+      // },
       {
-        test: /\.(jpg|png)$/,
-        use: {
-          loader: 'url-loader',
-        },
-      },
+        test: /\.(png|jp(e*)g|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'images/[hash]-[name].[ext]',
+            }
+          }
+        ]
+      }
     ]
   },
   optimization: {
