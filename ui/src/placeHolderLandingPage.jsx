@@ -8,17 +8,25 @@ import './global.css';
 export default class LandingPage extends React.Component {
   constructor() {
     super();
+    this.signedUpChange = this.signedUpChange.bind(this);
     this.state = {
       signedUp: false,
+      email: '',
+      role: '',
     };
   }
 
+  signedUpChange(email, role) {
+    this.setState({ signedUp: true, email: email, role: role })
+  }
+
   render() {
+    console.log(this.state);
     return (
       <div>
         <NavBarComponent />
-        <IntroContainer />
-        <HowItWorksContainer/>
+        <IntroContainer signedUpChange={this.signedUpChange}/>
+        <HowItWorksContainer signedUp={this.state.signedUpChange} role={this.state.role}/>
         <FooterContainer />
       </div>
     )

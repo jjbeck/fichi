@@ -8,7 +8,7 @@ type UserInfo {
   fname: String!
   lname: String!
   age: Int
-  coru: Int!
+  role: String!
   createdAt: String
 }
 
@@ -16,7 +16,7 @@ input UpdateUSERINFO {
   fname: String!
   lname: String
   age: Int
-  coru: Int!
+  role: String!
 }
 
 input SetUSERINFO {

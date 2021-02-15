@@ -4,6 +4,10 @@ import './intro.css';
 
 
 export default class IntroContainer extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
     render() {
         return (
             <>
@@ -20,7 +24,7 @@ export default class IntroContainer extends React.Component {
                         </div>
                         <div className="panel right"></div>
                         
-                        <RegistrationFormContainer/>
+                        <RegistrationFormContainer signedUpChange={this.props.signedUpChange}/>
                     </div>
                     
                 </div>

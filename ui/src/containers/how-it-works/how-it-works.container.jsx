@@ -8,7 +8,7 @@ import socialImg from '../../assets/images/social.svg';
 export default class HowItWorksContainer extends React.Component {
     render() {
         return (
-            <div className="how-it-works-wrapper">
+            <div id="how-it-works-top" className="how-it-works-wrapper">
                 <h3>How It Works</h3>
 
                 <div className="steps-wrapper">

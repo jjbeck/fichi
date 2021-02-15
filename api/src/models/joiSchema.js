@@ -11,7 +11,7 @@ const updateUser = Joi.object().keys({
     },
   }),
   age: Joi.number(),
-  coru: Joi.number().min(0).max(1).error(() => 'Creator or User must be 0 or 1'),
+  role: Joi.string(),
   fname: Joi.string().regex(/^[a-zA-Z]+$/).options({
     language: {
       string: {

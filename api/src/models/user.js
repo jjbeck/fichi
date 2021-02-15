@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
 
 const userUpdate = new mongoose.Schema({
   fname: { type: String },
-  coru: { type: Number },
+  role: { type: String },
   lname: { type: String },
   signUpDate: { type: Date },
   age: { type: Number },
