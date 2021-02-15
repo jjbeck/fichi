@@ -3,19 +3,25 @@ scalar UserAquireDate
 
 """Initial user info schema"""
 type UserInfo {
-  id: Int!
-  signUpDate: UserAquireDate!
+  _id: ID!
   email: String!
   fname: String!
   lname: String!
   age: Int
+  role: String!
+  createdAt: String
+}
+
+input UpdateUSERINFO {
+  fname: String!
+  lname: String
+  age: Int
+  role: String!
 }
 
 input SetUSERINFO {
   email: String!
-  fname: String!
-  lname: String!
-  age: Int
+  createdAt: String
 }
 
 
@@ -27,5 +33,7 @@ type Query {
 
 type Mutation {
   setUserInfo(info: SetUSERINFO!): UserInfo!
+  updateUserInfo(email: String!, changes: UpdateUSERINFO!): UserInfo!
 }
 
+#Make age not required

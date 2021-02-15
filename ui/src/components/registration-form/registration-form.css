@@ -1,0 +1,109 @@
+.valid-email{
+    border: 2px solid var(--main-purple);
+    color: var(--main-purple);
+    background: var(--main-white);
+    transition: .5s ease-in-out;
+}
+.valid-email:hover{
+    background: var(--main-purple);
+    color: var(--main-white);
+    border: 1px solid var(--main-purple);
+    transition: .5s ease-in-out;
+}
+.invalid-email{
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    cursor: not-allowed;
+    transition: .5s ease-in-out;
+}
+button {
+    padding: 10px 30px;
+    border-radius: 7px;
+    transition: .5s ease-in-out;
+}
+input[name="email"]{
+    width: 25%;
+    padding: 10px 15px;
+    z-index: 99999;
+}
+.form-wrapper {
+    width: 50%;
+    box-shadow: 5px 5px 10px 0px rgba(255,255,255,0.5);
+    border: 2px solid var(--main-purple);
+    height: 100%;
+    position: absolute;
+    background: #fff;
+    padding: 20px 35px;
+    height: 85%;
+}
+.intro-email-form{
+    position: absolute;
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    bottom: 20px;
+}
+.intro-email-form-hidden{
+    transition: .2s ease-in-out;
+    display: none;
+}
+h3{
+    color: var(--main-purple);
+    margin-top: 0px;
+}
+.form-hidden{
+    transition: .2s ease-in-out;
+    top: 50px;
+    opacity: 0;
+}
+.form-shown{
+    opacity: 1;
+    transition: .3s ease-in-out;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+}
+form {
+    /* opacity: 0px; */
+    top: 20px;
+}
+form, input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: 1px solid var(--main-purple);
+    border-radius: 5px;
+}
+input[name="role"] {
+    width: auto;
+    border: none;
+}
+.role-wrapper{
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+.button-submit-info{
+    border: 2px solid var(--main-purple);
+    color: var(--main-purple);
+    background: var(--main-white);
+    transition: .5s ease-in-out;
+    align-self: center;
+}
+.button-submit-info:hover{
+    background: var(--main-purple);
+    color: var(--main-white);
+    border: 1px solid var(--main-purple);
+    transition: .5s ease-in-out;
+}
+.button-submit-info-disabled{
+    opacity: 50%;
+}
+.error{
+    color: red;
+    transition: .3s ease-in-out;
+    padding-bottom: 5px;
+}
