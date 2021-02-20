@@ -1,9 +1,9 @@
 const fs = require('fs');
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
-
-const UserAquireDate = require('./graphql_date.js');
+const Joi = require('joi');
 const info = require('./info.js');
+const UserAquireDate = require('../resolvers/graphql_date.js');
 
 const resolvers = {
   Query: {
@@ -11,12 +11,13 @@ const resolvers = {
   },
   Mutation: {
     setUserInfo: info.setUserInfo,
+    updateUserInfo: info.updateUserInfo,
   },
   UserAquireDate,
 };
 
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync('schema.graphql', 'utf-8'),
+  typeDefs: fs.readFileSync('/home/jordan/Desktop/fichi/api/src/typeDefs/schema.graphql', 'utf-8'),
   resolvers,
   formatError: (error) => {
     console.log(error);
@@ -31,3 +32,7 @@ function installHandler(app) {
 }
 
 module.exports = { installHandler };
+
+/*
+1. Add validation to check for existing email in db
+*/

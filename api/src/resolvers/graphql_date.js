@@ -1,5 +1,4 @@
 const { GraphQLScalarType } = require('graphql');
-const { Kind } = require('graphql/language');
 
 const UserAquireDate = new GraphQLScalarType({
   name: 'UserAquireDate',

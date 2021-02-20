@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const { connectToDb } = require('./db.js');
-const { installHandler } = require('./api_handler.js');
+const { installHandler } = require('./src/handlers/api_handler.js');
+
 
 const app = express();
 

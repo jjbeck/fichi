@@ -44,8 +44,13 @@ input[name="email"]{
     text-align: center;
     bottom: 20px;
 }
+.intro-email-form-hidden{
+    transition: .2s ease-in-out;
+    display: none;
+}
 h3{
     color: var(--main-purple);
+    margin-top: 0px;
 }
 .form-hidden{
     transition: .2s ease-in-out;
@@ -56,6 +61,9 @@ h3{
     opacity: 1;
     transition: .3s ease-in-out;
     top: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
 }
 form {
     /* opacity: 0px; */
@@ -63,7 +71,7 @@ form {
 }
 form, input {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding: 5px 10px;
     border: none;
     border-bottom: 1px solid var(--main-purple);
@@ -78,11 +86,24 @@ input[name="role"] {
     display: flex;
     justify-content: space-between;
 }
-.valid-input{
-    color: green;
-    border: 1px solid green;
+.button-submit-info{
+    border: 2px solid var(--main-purple);
+    color: var(--main-purple);
+    background: var(--main-white);
+    transition: .5s ease-in-out;
+    align-self: center;
 }
-.invalid-input{
+.button-submit-info:hover{
+    background: var(--main-purple);
+    color: var(--main-white);
+    border: 1px solid var(--main-purple);
+    transition: .5s ease-in-out;
+}
+.button-submit-info-disabled{
+    opacity: 50%;
+}
+.error{
     color: red;
-    border: 1px solid red;
+    transition: .3s ease-in-out;
+    padding-bottom: 5px;
 }

@@ -7,8 +7,9 @@ export default async function graphQLFetch(query, variables = {}) {
       body: JSON.stringify({ query, variables }),
     });
     const body = await response.text();
-    if (body.errors) {
-      const error = body.errors[0];
+    const resp = JSON.parse(body);
+    if (resp.errors) {
+      const error = resp.errors[0];
       if (error.extensions.code === 'BAD_USER_INPUT') {
         const details = error.extensions.exception.errors.join('\n');
         alert(`${error.message}:\n ${details}`);
@@ -16,7 +17,7 @@ export default async function graphQLFetch(query, variables = {}) {
         alert(`${error.extensions.code}: ${error.message}`);
       }
     }
-    return body.data;
+    return resp;
   } catch (e) {
     alert(`Error in sending data to server: ${e.message}`);
   }
