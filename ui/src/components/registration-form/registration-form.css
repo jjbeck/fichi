@@ -78,3 +78,11 @@ input[name="role"] {
     display: flex;
     justify-content: space-between;
 }
+.valid-input{
+    color: green;
+    border: 1px solid green;
+}
+.invalid-input{
+    color: red;
+    border: 1px solid red;
+}

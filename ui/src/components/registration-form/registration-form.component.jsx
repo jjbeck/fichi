@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './registration-form.css';
+import * as utils from '../../utils/validators';
 
-export default class RegistrationFormComponent extends React.Component {
+class FormValidation{
+    constructor(){
+        this.state = {
+            fname: true, 
+            isLnameValid: true, 
+            isAgeValid: true
+        }
+    }
+    getFormStatus(field){
+        console.log(this.state[field]);
+        return this.state[field];
+    }
+    setFormStatus(field, rsObj){
+        this.state[field] = rsObj.isValid;
+    }
+}
+
+export default class RegistrationFormComponent extends React.Component {    
     constructor(props) {
         super(props);
-        this.showForm = this.showForm.bind(this);
+        this.form = new FormValidation();
+        this.registerUser = this.registerUser.bind(this);
         this.verifyEmail = this.verifyEmail.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.state = {
             showForm: false,
             formButtonLabel: "register",
             isEmailValid: false
         }
     }
-    showForm() {
+    registerUser() {
         const showForm = this.state.showForm;
         if( showForm ) {
             this.setState({showForm: false});
@@ -22,11 +42,20 @@ export default class RegistrationFormComponent extends React.Component {
         }
     }
     verifyEmail($event) {
-        const pattern = /^\S+@\S+\.\S+$/;
-        if(pattern.test($event.target.value)){
-            this.setState({isEmailValid: true});
-        }else{
-            this.setState({isEmailValid: false});
+        const rs = utils.validateEmail($event.target.value);
+        this.setState({isEmailValid: rs.isValid});
+    }
+    handleInputChange($event) {
+        const whichInput = $event.target.name;
+        switch(whichInput) {
+            case 'fname':
+                const isValid = utils.validateString($event.target.value);
+                this.form.setFormStatus('fname', isValid);
+                const rs = this.form.getFormStatus('fname')?'valid-input':'invalid-input'
+                this.form.setFormStatus('fname', rs);
+                break;
+            case 'lname':
+                break;
         }
     }
     render() {
@@ -37,8 +66,21 @@ export default class RegistrationFormComponent extends React.Component {
                 >
                     <form>
                         <h3>User Registration</h3>
-                        <input placeholder="Firstname"/>
-                        <input placeholder="Lastname"/>
+                        <div>
+                            <input 
+                                placeholder="Firstname"
+                                name="fname"
+                                onChange={this.handleInputChange}
+                                className={this.form.getFormStatus('fname')}
+                            />
+                        </div>
+                        
+                        <input 
+                            placeholder="Lastname"
+                            name="lname"
+                            onChange={this.handleInputChange}
+                            className={this.form.getFormStatus('lname')?'valid-input':'invalid-input'}
+                        />
                         <input placeholder="age"/>
                         <div className="role-wrapper">
                             <span>
@@ -63,19 +105,25 @@ export default class RegistrationFormComponent extends React.Component {
                     </form>
                 </div>
                 <div className="intro-email-form">
-                    <input 
-                        placeholder="email"
-                        type="email"
-                        name="email"
-                        autoFocus
-                        onKeyUp={this.verifyEmail}
-                    />
+                    {
+                        !this.state.showForm
+                        ?
+                            <input 
+                                placeholder="email"
+                                type="email"
+                                name="email"
+                                autoFocus
+                                onKeyUp={this.verifyEmail}
+                            />
+                        : ""
+                    }
+                    
                     <button 
-                        onClick={this.showForm}
+                        onClick={this.registerUser}
                         disabled={!this.state.isEmailValid}
                         className={this.state.isEmailValid?'valid-email':'invalid-email'}
                     >
-                        {this.state.isEmailValid?'Sign Up':'Register'}
+                        {this.state.showForm?'Sign Up':'Register'}
                     </button>
                 </div>
             </>

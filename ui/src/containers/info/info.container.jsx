@@ -1,14 +1,14 @@
 import React from 'react';
-import './how-it-works.css';
+import './info.css';
 import galleryImg from '../../assets/images/gallery.svg';
 import connectImg from '../../assets/images/connect.svg';
 import schedulingImg from '../../assets/images/scheduling.svg';
 import socialImg from '../../assets/images/social.svg';
 
-export default class HowItWorksContainer extends React.Component {
+export default class InfoContainer extends React.Component {
     render() {
         return (
-            <div className="how-it-works-wrapper">
+            <div className="info-wrapper">
                 <h3>How It Works</h3>
 
                 <div className="steps-wrapper">

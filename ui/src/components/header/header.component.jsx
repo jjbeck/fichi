@@ -1,7 +1,7 @@
 import React from 'react';
-import  './navbar.css'
+import  './header.css'
 
-export default class NavBarComponent extends React.Component {
+export default class HeaderComponent extends React.Component {
     constructor() {
         super();
     }
