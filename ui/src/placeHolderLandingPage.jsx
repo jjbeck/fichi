@@ -2,7 +2,6 @@ import React from 'react';
 import HeaderComponent from './components/header/header.component.jsx';
 import IntroContainer from './containers/intro/intro.container.jsx';
 import InfoContainer from './containers/info/info.container.jsx';
-// import RouteContent from './routes/routeContent.jsx'
 import FooterContainer from './containers/footer/footer.container.jsx';
 
 import './global.css';
@@ -33,10 +32,8 @@ class LandingPage extends React.Component {
     return (
       <div>
         <HeaderComponent />
-        
         <IntroContainer signedUpChange={this.signedUpChange}/>
         <InfoContainer/>
-        {/* <RouteContent /> */}
         <FooterContainer />
       </div>
     )
