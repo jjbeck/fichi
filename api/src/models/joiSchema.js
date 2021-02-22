@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
-const updateUser = Joi.object().keys({ 
+const setUser = Joi.object().keys({
+  email: Joi.string().email().label('Email'),
   lname: Joi.string().regex(/^[a-zA-Z]+$/).options({
     language: {
       string: {
@@ -10,8 +11,6 @@ const updateUser = Joi.object().keys({
       },
     },
   }),
-  age: Joi.number(),
-  role: Joi.string(),
   fname: Joi.string().regex(/^[a-zA-Z]+$/).options({
     language: {
       string: {
@@ -23,9 +22,5 @@ const updateUser = Joi.object().keys({
   }),
 });
 
-const setUser = Joi.object().keys({
-  email: Joi.string().email().label('Email'),
-});
 
-
-module.exports = { setUser, updateUser };
+module.exports = { setUser };

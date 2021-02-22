@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
 const Joi = require('joi');
@@ -11,13 +12,12 @@ const resolvers = {
   },
   Mutation: {
     setUserInfo: info.setUserInfo,
-    updateUserInfo: info.updateUserInfo,
   },
   UserAquireDate,
 };
 
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync('/home/jordan/Desktop/fichi/api/src/typeDefs/schema.graphql', 'utf-8'),
+  typeDefs: fs.readFileSync(path.resolve(__dirname, './schema.graphql'), 'utf-8'),
   resolvers,
   formatError: (error) => {
     console.log(error);

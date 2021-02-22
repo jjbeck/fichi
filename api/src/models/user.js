@@ -11,17 +11,7 @@ const userSchema = new mongoose.Schema({
   },
 }, { timestamps: { createdAt: 'createdAt' } });
 
-const userUpdate = new mongoose.Schema({
-  fname: { type: String },
-  role: { type: String },
-  lname: { type: String },
-  signUpDate: { type: Date },
-  age: { type: Number },
-});
-
 
 const User = mongoose.model('Email', userSchema, 'userInfo');
 
-const UserUpdate = mongoose.model('User', userUpdate, 'userInfo');
-
-module.exports = { User, UserUpdate };
+module.exports = { User };
