@@ -1,109 +1,122 @@
-.valid-email{
-    border: 2px solid var(--main-purple);
-    color: var(--main-purple);
-    background: var(--main-white);
-    transition: .5s ease-in-out;
-}
-.valid-email:hover{
-    background: var(--main-purple);
-    color: var(--main-white);
-    border: 1px solid var(--main-purple);
-    transition: .5s ease-in-out;
-}
-.invalid-email{
-    background: transparent;
-    color: #fff;
-    border: 1px solid #fff;
-    cursor: not-allowed;
-    transition: .5s ease-in-out;
-}
-button {
-    padding: 10px 30px;
-    border-radius: 7px;
-    transition: .5s ease-in-out;
-}
-input[name="email"]{
+
+.email-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    height: 35%;
     width: 25%;
-    padding: 10px 15px;
-    z-index: 99999;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
-.form-wrapper {
-    width: 50%;
-    box-shadow: 5px 5px 10px 0px rgba(255,255,255,0.5);
-    border: 2px solid var(--main-purple);
-    height: 100%;
-    position: absolute;
-    background: #fff;
-    padding: 20px 35px;
-    height: 85%;
-}
-.intro-email-form{
-    position: absolute;
+
+.email-top {
+    padding: 40px 40px 40px 20px;
     width: 100%;
-    margin: 0px auto;
-    text-align: center;
-    bottom: 20px;
-}
-.intro-email-form-hidden{
-    transition: .2s ease-in-out;
-    display: none;
-}
-h3{
-    color: var(--main-purple);
-    margin-top: 0px;
-}
-.form-hidden{
-    transition: .2s ease-in-out;
-    top: 50px;
-    opacity: 0;
-}
-.form-shown{
-    opacity: 1;
-    transition: .3s ease-in-out;
-    top: 10px;
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 90%;
 }
-form {
-    /* opacity: 0px; */
-    top: 20px;
+
+.email-top::before {
+    content: "";
+    position: absolute;
+    height: 50px;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    transform: skewy(-3deg);
+    background-color:  #BE22DB;
 }
-form, input {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 5px 10px;
-    border: none;
-    border-bottom: 1px solid var(--main-purple);
-    border-radius: 5px;
-}
-input[name="role"] {
-    width: auto;
-    border: none;
-}
-.role-wrapper{
+
+h2 {
+    font-weight: 6000;
     text-align: center;
+    margin-bottom: 32px;
+    color: #BE22DB;
+}
+
+h6 {
+    font-size: 13px;
+}
+
+.input-wrapper {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
-.button-submit-info{
-    border: 2px solid var(--main-purple);
-    color: var(--main-purple);
-    background: var(--main-white);
-    transition: .5s ease-in-out;
-    align-self: center;
+
+input {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 0;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #c8d3d068;
+    transition: 500ms ease all;
+} 
+
+#input-button {
+    cursor: pointer;
+    padding: 15px 60px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    color: #ffff;
+    background-color: #BE22DB;
+    margin-right: 16px;
+    transition: 500ms ease all;
 }
-.button-submit-info:hover{
-    background: var(--main-purple);
-    color: var(--main-white);
-    border: 1px solid var(--main-purple);
-    transition: .5s ease-in-out;
+
+input:focus {
+    outline: none;
+    box-shadow: 0 1px 0 0 purple;
+    border-color: purple;
 }
-.button-submit-info-disabled{
-    opacity: 50%;
+
+
+button:hover {
+    background-color: black;
+    transform: scale(0.98);
 }
-.error{
-    color: red;
-    transition: .3s ease-in-out;
-    padding-bottom: 5px;
+
+.email-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    background-color: #BE22DB;
+    padding: 60px 40px 40px;
+    color: #ffff;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
 }
+
+.-bottom, h3 {
+    color: #ffff;
+    font-size: 14px;
+}
+
+ul {
+    display: flex;
+    margin-top: 16px;
+    list-style: none;
+}
+
+li {
+    margin-right: 40px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+i {
+    transition: 500ms ease all;
+}
+
+i:hover {
+    color: black;
+}
+
+
