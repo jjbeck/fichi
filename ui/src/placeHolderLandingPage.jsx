@@ -3,7 +3,7 @@ import HeaderComponent from './components/header/header.component.jsx';
 import IntroContainer from './containers/intro/intro.container.jsx';
 import InfoContainer from './containers/info/info.container.jsx';
 import FooterContainer from './containers/footer/footer.container.jsx';
-
+import SignupContainer from './containers/signup/signup.container.jsx';
 import './global.css';
 import { withRouter } from 'react-router-dom';
 
@@ -34,6 +34,7 @@ class LandingPage extends React.Component {
         <HeaderComponent />
         <IntroContainer signedUpChange={this.signedUpChange}/>
         <InfoContainer/>
+        <SignupContainer/>
         <FooterContainer />
       </div>
     )
