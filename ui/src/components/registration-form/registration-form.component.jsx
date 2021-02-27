@@ -48,7 +48,7 @@ export default class RegistrationFormContainer extends React.Component {
 
   async componentDidMount() {
     this.loadFbLoginApi();
-    console.log(this.state.signedIn);
+    console.log("Is user signed in", this.state.signedIn);
     const clientId = window.ENV.GOOGLE_CLIENT_ID;
     if (!clientId) return;
     window.gapi.load('auth2', () => {
@@ -59,7 +59,7 @@ export default class RegistrationFormContainer extends React.Component {
       }
     })
     await this.loadData();
-    console.log(this.state.signedIn);
+    console.log("Is user signed in", this.state.signedIn);
   }
 
   async loadData() {
