@@ -6,8 +6,7 @@ const { setUser } = require('../models/joiSchema.js');
 const { User } = require('../models/user.js');
 
 async function getUserInfo() {
-  const db = getDb();
-  const userInfo = await db.collection('userInfo').find({}).toArray();
+  const userInfo = await User.find({});
   return userInfo;
 }
 

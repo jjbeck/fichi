@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
       message: ({ value }) => `Email ${value} already exists`,
     },
   },
+  fname: { type: String },
+  lname: { type: String },
+  createdAt: { type: String },
 }, { timestamps: { createdAt: 'createdAt' } });
 
 

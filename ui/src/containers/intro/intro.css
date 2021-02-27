@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url("../../assets/images/pexels-ketut-subiyanto-4473622.jpg");
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("../../assets/images/pexels-ketut-subiyanto-4473622.jpg");
     background-size: cover;
     background-position: center;
     

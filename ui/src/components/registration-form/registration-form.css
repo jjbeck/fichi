@@ -2,10 +2,13 @@
 .email-wrapper {
     display: flex;
     justify-content: center;
+    font-family: 'Questrial';
     align-items: center;
     flex-direction: column;
-    background-color: white;
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    background-color: rgba(255,255,255,1);
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 30px 30px -5px rgba(0,0,0,0.6), 0 30px 30px -5px rgba(0,0,0,0.6);
     height: 35%;
     width: 25%;
     margin-top: 5%;
@@ -20,26 +23,17 @@
     flex-direction: column;
 }
 
-.email-top::before {
-    content: "";
-    position: absolute;
-    height: 50px;
-    bottom: -20px;
-    left: 0;
-    right: 0;
-    transform: skewy(-3deg);
-    background-color:  #BE22DB;
-}
 
 h2 {
-    font-weight: 6000;
+    font-weight: 550;
     text-align: center;
     margin-bottom: 32px;
     color: #BE22DB;
 }
 
 h6 {
-    font-size: 13px;
+    font-size: 17px;
+    color: black;
 }
 
 .input-wrapper {
@@ -49,23 +43,32 @@ h6 {
 }
 
 input {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 500;
-    padding: 4px 0;
+    padding: 10px;
     width: 100%;
     border: none;
-    border-bottom: 2px solid #c8d3d068;
+    border: 3px solid rgba(0,0,0,0.5);
     transition: 500ms ease all;
+    background: none;
 } 
+
+
+
+::placeholder {
+    color: black;
+    padding-left: 5px;
+}
 
 #input-button {
     cursor: pointer;
     padding: 15px 60px;
-    border-radius: 30px;
+    border-radius: 15px;
     font-weight: 600;
+    font-size: 17px;
     border: none;
     color: #ffff;
-    background-color: #BE22DB;
+    background-color: rgba(190, 34, 219, 0.75);
     margin-right: 16px;
     transition: 500ms ease all;
 }
@@ -77,7 +80,7 @@ input:focus {
 }
 
 
-button:hover {
+#input-button:hover {
     background-color: black;
     transform: scale(0.98);
 }
@@ -88,7 +91,7 @@ button:hover {
     align-items: center;
     width: 100%;
     justify-content: center;
-    background-color: #BE22DB;
+    background-color: rgba(190, 34, 219, 0.6);
     padding: 60px 40px 40px;
     color: #ffff;
     box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
@@ -96,11 +99,13 @@ button:hover {
 
 .-bottom, h3 {
     color: #ffff;
-    font-size: 14px;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 ul {
     display: flex;
+    flex-direction: column;
     margin-top: 16px;
     list-style: none;
 }
@@ -115,8 +120,12 @@ i {
     transition: 500ms ease all;
 }
 
+
+
 i:hover {
-    color: black;
+    background-color: black;
+    transform: scale(0.98);
 }
+
 
 
