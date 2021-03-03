@@ -5,6 +5,7 @@ import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-butto
 import './registration-form.css'
 
 const emailPattern = /.{1,}@[^.]{1,}/
+const FB_APP_ID = process.env.FB_APP_ID;
 
 
 export default class RegistrationFormContainer extends React.Component {
@@ -12,54 +13,34 @@ export default class RegistrationFormContainer extends React.Component {
     super(props);
     this.emailVal = this.emailVal.bind(this);
     this.googleSignIn = this.googleSignIn.bind(this);
+    this.SignOut = this.SignOut.bind(this);
     this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
     this.fbSignIn = this.fbSignIn.bind(this);
     this.statusChangeCallback = this.statusChangeCallback.bind(this);
     this.loadData = this.loadData.bind(this);
     this.state = {
         noError: true,
-        disabled: true,
+        ssoDisabled: true,
         signedIn: false,
+        email: '',
+        name: '',
     }
-  }
-
-  loadFbLoginApi() {
-
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : window.ENV.FB_APP_ID,
-            cookie     : true,  // enable cookies to allow the server to access
-            // the session
-            xfbml      : true,  // parse social plugins on this page
-            version    : 'v2.5' // use version 2.1
-        });
-    };
-
-    console.log("Loading fb api");
-      // Load the SDK asynchronously
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
   }
 
   async componentDidMount() {
     this.loadFbLoginApi();
-    console.log("Is user signed in", this.state.signedIn);
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    
     const clientId = window.ENV.GOOGLE_CLIENT_ID;
     if (!clientId) return;
     window.gapi.load('auth2', () => {
       if (!window.gapi.auth2.getAuthInstance()) {
         window.gapi.auth2.init({ clientId: clientId }).then(() => {
-          this.setState({ disable: false })
+          this.setState({ ssodDisabled: false })
         })
       }
     })
     await this.loadData();
-    console.log("Is user signed in", this.state.signedIn);
   }
 
   async loadData() {
@@ -67,14 +48,17 @@ export default class RegistrationFormContainer extends React.Component {
     const response = await fetch(`${apiEndpoint}/user`, {
       method: 'POST',
     });
+
+    // To do: handle error to logout of everything if goes wrong
     const body = await response.text();
     const result = JSON.parse(body);
-    const { signedIn, givenName } = result;
-    this.setState({ signedIn });
+    console.log(result);
+    const { signedIn, name, email } = result;
+    this.setState({ signedIn, name, email });
 
   }
+
   async googleSignIn() {
-    console.log('clicke');
     let googleToken;
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
@@ -94,38 +78,56 @@ export default class RegistrationFormContainer extends React.Component {
       const body = await response.text();
       const result = JSON.parse(body);
       const { signedIn, givenName } = result;
-      this.setState({ signedIn: signedIn })
-      console.log(result);
+      this.setState({ signedIn: signedIn, googleAuth: true })
     } catch (error) {
       console.log(error);
+      // To do: handle error to logout of everything if goes wrong
     }
   }
 
-  async signOut() {
+  async SignOut() {
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
-    
     try {
-      await fetch(`${apiEndpoint}/signout`, {
+      const response = await fetch(`${apiEndpoint}/signout`, {
         method: 'POST',
       });
       const auth2 = window.gapi.auth2.getAuthInstance();
+      const body = await response.text();
+      const result = JSON.parse(body);
       await auth2.signOut();
-      this.setState({ signIn: false });
+      this.setState({ signedIn: false });
     } catch(error) {
       console.log(error);
     }
   }
 
-  logAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-    console.log('Successful login for: ' + response.name);
-    });
+  loadFbLoginApi() {
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : window.ENV.FB_APP_ID,
+            cookie     : true,  // enable cookies to allow the server to access
+            // the session
+            xfbml      : true,  // parse social plugins on this page
+            version    : 'v2.5' // use version 2.1
+        });
+
+        FB.getLoginStatus(function(response) {
+        
+        });
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }
 
   statusChangeCallback(response) {
     if (response.status === 'connected') {
-      console.log(response);
       this.logAPI();
     } else if (response.status === 'not_authorized') {
         console.log("Please log into this app.");
@@ -134,11 +136,37 @@ export default class RegistrationFormContainer extends React.Component {
     }
   }
 
-  async fbSignIn() {
-      FB.login(function(response) {
-        this.statusChangeCallback(response)
-      }.bind(this), {scope: 'email'});
+  logAPI() {
+    FB.api('/me', function(response) {
+    });
   }
+
+  async fbSignIn() {
+    let facebookToken;
+    FB.login(async function(response) {
+      this.statusChangeCallback(response)
+      facebookToken = response.authResponse.accessToken;
+
+      try {
+        const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+        const response = await fetch(`${apiEndpoint}/signin`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({ facebook_token: facebookToken }),
+        });
+        const body = await response.text();
+        const result = JSON.parse(body);
+        const { signedIn, givenName } = result;
+        this.setState({ signedIn: signedIn })
+      } catch (error) {
+        console.log(error);
+      }
+
+
+      
+    }.bind(this), {scope: 'email'});
+    FB.api('/me/permissions', 'delete', null, () => FB.logout());
+}
 
   emailVal(e) {
       const error = emailPattern.test(e.target.value);
@@ -147,6 +175,17 @@ export default class RegistrationFormContainer extends React.Component {
   }
   render() {
     const { classes } = this.props;
+  
+    let googleButton;
+    let facebookButton;
+    if (this.state.signedIn === true) {
+      googleButton = <button onClick={this.SignOut}>sign out</button>
+      facebookButton = <button onClick={this.SignOut}>sign out</button>
+    } else {
+      googleButton = <GoogleLoginButton onClick={this.googleSignIn}/>
+      facebookButton= <FacebookLoginButton onClick={this.fbSignIn} />
+    }
+
     return (
           <div className="email-wrapper">
             <div className="email-top">
@@ -167,8 +206,8 @@ export default class RegistrationFormContainer extends React.Component {
               <h3>Or: </h3>
               <div className="link-container">
                 <ul>
-                  <li onClick={this.fbSignIn}><i><FacebookLoginButton /></i></li>
-                  <li onClick={this.googleSignIn}><i><GoogleLoginButton /></i></li>
+                  <li><i>{facebookButton}</i></li>
+                  <li><i>{googleButton}</i></li>
                 </ul>
               </div>
             </div>
@@ -177,3 +216,11 @@ export default class RegistrationFormContainer extends React.Component {
       );
   }
 };
+
+/*
+1. On succes login, return access token
+2. end acces token to backend to authenticate with google or facebook
+3. on success return JWT token (make expired one once finished) and store as cookie and create user account
+*/
+
+//To do: double check that any error returned immediately logs out user
