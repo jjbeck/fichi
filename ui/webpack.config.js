@@ -1,15 +1,16 @@
 const path = require('path');
-// import css from "file.css";
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: 'development',
   entry: { app: ['./src/fichiApp.jsx'] },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public'),
-    publicPath: '/',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '',
   },
   module: {
+    
     rules: [
       {
         test: /\.jsx?$/,
@@ -42,7 +43,13 @@ module.exports = {
   optimization: {
     splitChunks: {
       name: 'vendor',
-      chunks: 'all',
-    },
-  }
+      chunks: 'all'
+    }
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: "./public/index.html",
+      filename: "./index.html"
+    })
+  ]
 };
