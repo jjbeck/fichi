@@ -3,7 +3,7 @@ import React from 'react';
 export default class EarlyAccessButtonComponent extends React.Component {
     onclickEvent() {
         scrollTo(window.document.body, 0, 1250);
-        // fire modal
+        console.log("testing");
     }
     scrollTo(element, to, duration) {
         var start = element.scrollTop,
