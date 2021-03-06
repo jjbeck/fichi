@@ -1,6 +1,6 @@
 const { UserInputError } = require('apollo-server-express');
 const Joi = require('joi');
-const { getDb } = require('../../db.js');
+
 
 const { setUser } = require('../models/joiSchema.js');
 const { User } = require('../models/user.js');

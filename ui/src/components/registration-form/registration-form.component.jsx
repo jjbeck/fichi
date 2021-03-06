@@ -3,6 +3,7 @@ import GoogleButton from 'react-google-button'
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 
 import './registration-form.css'
+import graphQLFetch from '../../api_handlers/graphQLFetch.js'
 
 const emailPattern = /.{1,}@[^.]{1,}/
 const FB_APP_ID = process.env.FB_APP_ID;
@@ -18,6 +19,7 @@ export default class RegistrationFormContainer extends React.Component {
     this.fbSignIn = this.fbSignIn.bind(this);
     this.statusChangeCallback = this.statusChangeCallback.bind(this);
     this.loadData = this.loadData.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
     this.state = {
         noError: true,
         ssoDisabled: true,
@@ -52,13 +54,23 @@ export default class RegistrationFormContainer extends React.Component {
     // To do: handle error to logout of everything if goes wrong
     const body = await response.text();
     const result = JSON.parse(body);
-    console.log(result);
+  
     const { signedIn, name, email } = result;
     this.setState({ signedIn, name, email });
 
   }
 
-  async googleSignIn() {
+  async deleteAccount(e) {
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    const { email } = this.state;
+    const response = await fetch(`${apiEndpoint}/deleteaccount`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({ email })
+    })
+  }
+
+  async googleSignIn(e) {
     let googleToken;
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
@@ -77,15 +89,19 @@ export default class RegistrationFormContainer extends React.Component {
       });
       const body = await response.text();
       const result = JSON.parse(body);
-      const { signedIn, givenName } = result;
-      this.setState({ signedIn: signedIn, googleAuth: true })
+
+      const { signedIn, fname, email } = result;
+      this.setState({ signedIn: signedIn, name: fname, email })
     } catch (error) {
       console.log(error);
       // To do: handle error to logout of everything if goes wrong
     }
   }
 
-  async SignOut() {
+  async SignOut(e) {
+    if (e.target.name === 'facebook') {
+      FB.api('/me/permissions', 'delete', null, () => FB.logout());
+    }
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
     try {
       const response = await fetch(`${apiEndpoint}/signout`, {
@@ -156,8 +172,8 @@ export default class RegistrationFormContainer extends React.Component {
         });
         const body = await response.text();
         const result = JSON.parse(body);
-        const { signedIn, givenName } = result;
-        this.setState({ signedIn: signedIn })
+        const { signedIn, fname, email } = result;
+        this.setState({ signedIn: signedIn, name: fname, email });
       } catch (error) {
         console.log(error);
       }
@@ -165,7 +181,7 @@ export default class RegistrationFormContainer extends React.Component {
 
       
     }.bind(this), {scope: 'email'});
-    FB.api('/me/permissions', 'delete', null, () => FB.logout());
+  
 }
 
   emailVal(e) {
@@ -179,10 +195,10 @@ export default class RegistrationFormContainer extends React.Component {
     let googleButton;
     let facebookButton;
     if (this.state.signedIn === true) {
-      googleButton = <button onClick={this.SignOut}>sign out</button>
-      facebookButton = <button onClick={this.SignOut}>sign out</button>
+      googleButton = <><button name="google" onClick={this.SignOut}>sign out</button><button name="google" onClick={this.deleteAccount}>delete</button></>
+      facebookButton = <><button name="facebook" onClick={this.SignOut}>sign out</button><button name="google" onClick={this.deleteAccount}>delete</button></>
     } else {
-      googleButton = <GoogleLoginButton onClick={this.googleSignIn}/>
+      googleButton = <GoogleLoginButton value="google" onClick={this.googleSignIn}/>
       facebookButton= <FacebookLoginButton onClick={this.fbSignIn} />
     }
 
@@ -224,3 +240,4 @@ export default class RegistrationFormContainer extends React.Component {
 */
 
 //To do: double check that any error returned immediately logs out user
+// Clean up code and write comments 
