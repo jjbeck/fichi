@@ -41,11 +41,12 @@ routes.post('/signin', async (req, res) => {
     res.status(500).send('Missing JWT_SECRET. Refusing to authenticate');
   }
 
+  if (!req.body.google_token && !req.body.facebook_token) {
+    res.status(400).send({ code: 400, message: 'Missing Token' });
+  }
+
   if (req.body.google_token) {
     const googleToken = req.body.google_token;
-    if (!googleToken) {
-      res.status(400).send({ code: 400, message: 'Missing Token' });
-    }
     const client = new OAuth2Client();
     let payload;
     try {
@@ -60,6 +61,7 @@ routes.post('/signin', async (req, res) => {
     };
     const token = jwt.sign(credentials, JWT_SECRET);
     res.cookie('jwt_google', token, { httpOnly: true });
+    res.status(400).send({ code: 400, message: 'Missing Token' });
     res.json(credentials);
 
     User.count({ email: retEmail }, (err, count) => {
@@ -71,7 +73,6 @@ routes.post('/signin', async (req, res) => {
       }
     });
   }
-
 
   if (req.body.facebook_token) {
     const facebookToken = req.body.facebook_token;
@@ -114,12 +115,10 @@ routes.post('/signout', async (req, res) => {
 routes.post('/deleteaccount', async (req, res) => {
   res.clearCookie('jwt_google');
   res.clearCookie('jwt_facebook');
-  console.log(req.body.email);
-  //TO DO delete user from mongoose record and put in delete account database
+  User.deleteOne({ email: req.body.email }, (err) => {
+    if (err) res.status(400).send({ code: 400, message: err });
+  });
+  res.json({ status: 'you have deleted your account' });
 });
 
 module.exports = { routes };
-
-//add delete account
-//Add method to properly get rid of facebook auth so it doesnt throw error
-

@@ -30,10 +30,14 @@ export default class RegistrationFormContainer extends React.Component {
   }
 
   async componentDidMount() {
+    // Check if user session still active in cookie
+    await this.loadData();
+    // Initialize facebook login API
     this.loadFbLoginApi();
+    // Get env var for api and google app ID
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
-    
     const clientId = window.ENV.GOOGLE_CLIENT_ID;
+    // Initialize google login API
     if (!clientId) return;
     window.gapi.load('auth2', () => {
       if (!window.gapi.auth2.getAuthInstance()) {
@@ -42,32 +46,49 @@ export default class RegistrationFormContainer extends React.Component {
         })
       }
     })
-    await this.loadData();
   }
 
   async loadData() {
+    // Get env var for api
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    // Use backend to check if user credentials in cookie
     const response = await fetch(`${apiEndpoint}/user`, {
       method: 'POST',
     });
 
-    // To do: handle error to logout of everything if goes wrong
+    // if cookie session backend sends response
     const body = await response.text();
     const result = JSON.parse(body);
-  
     const { signedIn, name, email } = result;
+
+    // set state based on reponse from backend
     this.setState({ signedIn, name, email });
 
   }
 
   async deleteAccount(e) {
+
+    if (e.target.name === 'facebook') {
+      FB.api('/me/permissions', 'delete', null, () => FB.logout());
+    }
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
     const { email } = this.state;
-    const response = await fetch(`${apiEndpoint}/deleteaccount`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ email })
-    })
+    try {
+      const response = await fetch(`${apiEndpoint}/deleteaccount`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ email }),
+
+      });
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      const body = await response.text();
+      const result = JSON.parse(body);
+      await auth2.signOut();
+      this.setState({ signedIn: false });
+      console.log(this.state);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   async googleSignIn(e) {
@@ -87,6 +108,8 @@ export default class RegistrationFormContainer extends React.Component {
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ google_token: googleToken }),
       });
+
+      if ([400, 403].includes(response.status)) console.log('errrr');
       const body = await response.text();
       const result = JSON.parse(body);
 
@@ -119,6 +142,7 @@ export default class RegistrationFormContainer extends React.Component {
 
   loadFbLoginApi() {
 
+    // full facebooke initialization
     window.fbAsyncInit = function() {
         FB.init({
             appId      : window.ENV.FB_APP_ID,
@@ -126,10 +150,6 @@ export default class RegistrationFormContainer extends React.Component {
             // the session
             xfbml      : true,  // parse social plugins on this page
             version    : 'v2.5' // use version 2.1
-        });
-
-        FB.getLoginStatus(function(response) {
-        
         });
     };
 
@@ -170,6 +190,8 @@ export default class RegistrationFormContainer extends React.Component {
           headers: { 'Content-Type': 'application/json'},
           body: JSON.stringify({ facebook_token: facebookToken }),
         });
+
+        if ([400].includes(response.status)) console.log('errrr');
         const body = await response.text();
         const result = JSON.parse(body);
         const { signedIn, fname, email } = result;
@@ -233,7 +255,7 @@ export default class RegistrationFormContainer extends React.Component {
   }
 };
 
-/*
+/* Login workflow
 1. On succes login, return access token
 2. end acces token to backend to authenticate with google or facebook
 3. on success return JWT token (make expired one once finished) and store as cookie and create user account
@@ -241,3 +263,4 @@ export default class RegistrationFormContainer extends React.Component {
 
 //To do: double check that any error returned immediately logs out user
 // Clean up code and write comments 
+// To do: handle error to logout of everything if goes wrong
