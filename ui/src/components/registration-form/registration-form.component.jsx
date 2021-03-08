@@ -56,6 +56,7 @@ export default class RegistrationFormContainer extends React.Component {
       method: 'POST',
     });
 
+    if ([400].includes(response.status)) console.log('errrr');
     // if cookie session backend sends response
     const body = await response.text();
     const result = JSON.parse(body);
@@ -80,6 +81,8 @@ export default class RegistrationFormContainer extends React.Component {
         body: JSON.stringify({ email }),
 
       });
+
+      if ([400].includes(response.status)) console.log('errrr');
       const auth2 = window.gapi.auth2.getAuthInstance();
       const body = await response.text();
       const result = JSON.parse(body);

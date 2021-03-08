@@ -61,7 +61,6 @@ routes.post('/signin', async (req, res) => {
     };
     const token = jwt.sign(credentials, JWT_SECRET);
     res.cookie('jwt_google', token, { httpOnly: true });
-    res.status(400).send({ code: 400, message: 'Missing Token' });
     res.json(credentials);
 
     User.count({ email: retEmail }, (err, count) => {
@@ -103,7 +102,13 @@ routes.post('/signin', async (req, res) => {
 });
 
 routes.post('/user', (req, res) => {
-  res.send(getUser(req));
+  const user = getUser(req);
+
+  if (user.signedIn === false) {
+    res.status(400).send({ message: 'troule signing in user. Please try signing in again.'});
+  } else {
+    res.send(user);
+  }
 });
 
 routes.post('/signout', async (req, res) => {
