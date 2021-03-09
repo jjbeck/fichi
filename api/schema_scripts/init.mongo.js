@@ -8,8 +8,13 @@
  * MLab:
  *   mongo mongodb://user:pwd@xxx.mlab.com:33533/issuetracker scripts/init.mongo.js
  */
-
 let db;
+// Connect to MongoDB
+db = new Mongo();
+
+// Create a database instance
+db = db.getDB("fichi");
+
 db.userInfo.remove({});
 
 const users = [

@@ -1,250 +1,269 @@
-import { info } from 'console';
-import React from 'react';
-import './registration-form.css';
+import React from "react";
+import GoogleButton from 'react-google-button'
+import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
+
+import './registration-form.css'
 import graphQLFetch from '../../api_handlers/graphQLFetch.js'
 
-class FormValidation{
-    constructor(){
-        this.state = {
-            fname: true, 
-            isLnameValid: true, 
-            isAgeValid: true
-        }
+const emailPattern = /.{1,}@[^.]{1,}/
+const FB_APP_ID = process.env.FB_APP_ID;
+
+
+export default class RegistrationFormContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.emailVal = this.emailVal.bind(this);
+    this.googleSignIn = this.googleSignIn.bind(this);
+    this.SignOut = this.SignOut.bind(this);
+    this.loadFbLoginApi = this.loadFbLoginApi.bind(this);
+    this.fbSignIn = this.fbSignIn.bind(this);
+    this.statusChangeCallback = this.statusChangeCallback.bind(this);
+    this.loadData = this.loadData.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
+    this.state = {
+        noError: true,
+        ssoDisabled: true,
+        signedIn: false,
+        email: '',
+        name: '',
     }
-    getFormStatus(field){
-        console.log(this.state[field]);
-        return this.state[field];
+  }
+
+  async componentDidMount() {
+    // Check if user session still active in cookie
+    await this.loadData();
+    // Initialize facebook login API
+    this.loadFbLoginApi();
+    // Get env var for api and google app ID
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    const clientId = window.ENV.GOOGLE_CLIENT_ID;
+    // Initialize google login API
+    if (!clientId) return;
+    window.gapi.load('auth2', () => {
+      if (!window.gapi.auth2.getAuthInstance()) {
+        window.gapi.auth2.init({ clientId: clientId }).then(() => {
+          this.setState({ ssodDisabled: false })
+        })
+      }
+    })
+  }
+
+  async loadData() {
+    // Get env var for api
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    // Use backend to check if user credentials in cookie
+    const response = await fetch(`${apiEndpoint}/user`, {
+      method: 'POST',
+    });
+
+    if ([400].includes(response.status)) console.log('errrr');
+    // if cookie session backend sends response
+    const body = await response.text();
+    const result = JSON.parse(body);
+    const { signedIn, name, email } = result;
+
+    // set state based on reponse from backend
+    this.setState({ signedIn, name, email });
+
+  }
+
+  async deleteAccount(e) {
+
+    if (e.target.name === 'facebook') {
+      FB.api('/me/permissions', 'delete', null, () => FB.logout());
     }
-    setFormStatus(field, rsObj){
-        this.state[field] = rsObj.isValid;
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    const { email } = this.state;
+    try {
+      const response = await fetch(`${apiEndpoint}/deleteaccount`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ email }),
+
+      });
+
+      if ([400].includes(response.status)) console.log('errrr');
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      const body = await response.text();
+      const result = JSON.parse(body);
+      await auth2.signOut();
+      this.setState({ signedIn: false });
+      console.log(this.state);
+    } catch(error) {
+      console.log(error);
     }
+  }
+
+  async googleSignIn(e) {
+    let googleToken;
+    try {
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      const googleUser = await auth2.signIn();
+      googleToken = googleUser.getAuthResponse().id_token;
+    } catch (error) {
+      console.log(error);
+    }
+    
+    try {
+      const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+      const response = await fetch(`${apiEndpoint}/signin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ google_token: googleToken }),
+      });
+
+      if ([400, 403].includes(response.status)) console.log('errrr');
+      const body = await response.text();
+      const result = JSON.parse(body);
+
+      const { signedIn, fname, email } = result;
+      this.setState({ signedIn: signedIn, name: fname, email })
+    } catch (error) {
+      console.log(error);
+      // To do: handle error to logout of everything if goes wrong
+    }
+  }
+
+  async SignOut(e) {
+    if (e.target.name === 'facebook') {
+      FB.api('/me/permissions', 'delete', null, () => FB.logout());
+    }
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    try {
+      const response = await fetch(`${apiEndpoint}/signout`, {
+        method: 'POST',
+      });
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      const body = await response.text();
+      const result = JSON.parse(body);
+      await auth2.signOut();
+      this.setState({ signedIn: false });
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  loadFbLoginApi() {
+
+    // full facebooke initialization
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : window.ENV.FB_APP_ID,
+            cookie     : true,  // enable cookies to allow the server to access
+            // the session
+            xfbml      : true,  // parse social plugins on this page
+            version    : 'v2.5' // use version 2.1
+        });
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  }
+
+  statusChangeCallback(response) {
+    if (response.status === 'connected') {
+      this.logAPI();
+    } else if (response.status === 'not_authorized') {
+        console.log("Please log into this app.");
+    } else {
+        console.log("Please log into this facebook.");
+    }
+  }
+
+  logAPI() {
+    FB.api('/me', function(response) {
+    });
+  }
+
+  async fbSignIn() {
+    let facebookToken;
+    FB.login(async function(response) {
+      this.statusChangeCallback(response)
+      facebookToken = response.authResponse.accessToken;
+
+      try {
+        const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+        const response = await fetch(`${apiEndpoint}/signin`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({ facebook_token: facebookToken }),
+        });
+
+        if ([400].includes(response.status)) console.log('errrr');
+        const body = await response.text();
+        const result = JSON.parse(body);
+        const { signedIn, fname, email } = result;
+        this.setState({ signedIn: signedIn, name: fname, email });
+      } catch (error) {
+        console.log(error);
+      }
+
+
+      
+    }.bind(this), {scope: 'email'});
+  
 }
 
-export default class RegistrationFormComponent extends React.Component {    
-    constructor(props) {
-        super(props);
-        
-        this.verifyEmail = this.verifyEmail.bind(this);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onFormChange = this.onFormChange.bind(this);
-        this.verifyFName = this.verifyFName.bind(this);
-        this.verifyLName = this.verifyLName.bind(this);
-        this.verifyAge = this.verifyAge.bind(this);
-        this.submitEmail = this.submitEmail.bind(this);
-        this.submitInfo = this.submitInfo.bind(this);
-        this.verifyRole = this.verifyRole.bind(this);
-
-        this.state = {
-            showForm: false,
-            formButtonLabel: "register",
-            isEmailValid: false,
-            emailSubmit: false,
-            email: '',
-            info: {
-                fname: '',
-                lname: '',
-                age: '',
-                role: '',
-            },
-            errors: {
-                fname: true,
-                lname: true,
-                age: true,
-                role: true,
-            },
-            errorMessages: {
-                fname: '',
-                lname: '',
-                age: '',
-                role: '',
-            }
-        }
+  emailVal(e) {
+      const error = emailPattern.test(e.target.value);
+      console.log(error);
+      this.setState({ noError: error });
+  }
+  render() {
+    const { classes } = this.props;
+  
+    let googleButton;
+    let facebookButton;
+    if (this.state.signedIn === true) {
+      googleButton = <><button name="google" onClick={this.SignOut}>sign out</button><button name="google" onClick={this.deleteAccount}>delete</button></>
+      facebookButton = <><button name="facebook" onClick={this.SignOut}>sign out</button><button name="google" onClick={this.deleteAccount}>delete</button></>
+    } else {
+      googleButton = <GoogleLoginButton value="google" onClick={this.googleSignIn}/>
+      facebookButton= <FacebookLoginButton onClick={this.fbSignIn} />
     }
 
-    onEmailChange(e) {
-        e.preventDefault();
-        this.setState({ email: e.target.value })
-    }
-
-    onFormChange(e) {
-        const { name, value } = e.target;
-        this.setState(prevState => ({
-            info: { ...prevState.info, [name]: value },
-            }));
-    }
-
-    async submitEmail() {
-        const { email } = this.state;
-        const query = 'mutation setUserInfo($info: SetUSERINFO!) { setUserInfo(info: $info) { email } }'
-        const response = await graphQLFetch(query, { info: {'email': email  } } );
-
-        if (response.data) {
-            this.setState({ emailSubmit: true, showForm: true })
-        } else {
-            console.log('email submit failed')
-        }
-    }
-
-    async submitInfo() {
-        const { email, info, errors } = this.state;
-
-        const query = 'mutation updateUserInfo($email: String!, $changes: UpdateUSERINFO!) { updateUserInfo(email: $email, changes: $changes) { fname role } }';
-
-        const response = await graphQLFetch(query, { 'email': email, changes: info });
-
-        if (response.data) {
-          this.setState({ showForm: false });
-          console.log('info submit');
-          this.props.signedUpChange(this.state.email, this.state.info.role)
-          const titleElement = document.getElementById('how-it-works-top')
-          titleElement.scrollIntoView({ behavior: 'smooth' })
-        } else {
-            console.log('submit info failed');
-        }
-
-        
-    }
-
-    verifyFName($event) {
-        const namePattern = /^[a-zA-Z]+$/;
-        const stateCopy = Object.assign({}, this.state)
-    
-        // Verify user entered first name
-        if ($event.target.value.length === 0 && $event.target.name === 'fname') {
-            stateCopy.errorMessages['fname'] = 'Please enter first name';
-            this.setState({ stateCopy })
-        } else if (!namePattern.test($event.target.value)) {
-            stateCopy.errorMessages['fname'] = 'Only letters allowed';
-            this.setState({ stateCopy })
-        } else {
-            stateCopy.errors['fname'] = false;
-            stateCopy.errorMessages['fname'] = '';
-            this.setState({ stateCopy })
-        }
-        
-    }
-
-    verifyLName($event) {
-        const namePattern = /^[a-zA-Z]+$/;
-        const stateCopy = Object.assign({}, this.state)
-    
-        // Verify user only used letters if last name entered
-        if ($event.target.value.length > 0 && !namePattern.test($event.target.value)) {
-            stateCopy.errorMessages['lname'] = 'Only letters allowed';
-            this.setState({ stateCopy })
-        } else {
-            stateCopy.errors['lname'] = false;
-            stateCopy.errorMessages['lname'] = false;
-            this.setState({ stateCopy })
-        }
-    }
-
-    verifyAge($event) {
-        const agePattern = /^[0-9]*$/;
-        const stateCopy = Object.assign({}, this.state)
-
-        // Verify age contains only integers
-        if ($event.target.value.length > 0 && !agePattern.test($event.target.value))  {
-            stateCopy.errorMessages['age'] = 'Only numbers allowed';
-            this.setState({ stateCopy })
-        } else {
-            stateCopy.errors['age'] = false;
-            stateCopy.errorMessages['age'] = '';
-            this.setState({ stateCopy })
-        }
-    }
-
-    verifyEmail($event) {
-        const rs = utils.validateEmail($event.target.value);
-        this.setState({isEmailValid: rs.isValid});
-    }
-    handleInputChange($event) {
-        const whichInput = $event.target.name;
-        switch(whichInput) {
-            case 'fname':
-                const isValid = utils.validateString($event.target.value);
-                this.form.setFormStatus('fname', isValid);
-                const rs = this.form.getFormStatus('fname')?'valid-input':'invalid-input'
-                this.form.setFormStatus('fname', rs);
-                break;
-            case 'lname':
-                break;
-        }
-    }
-
-    verifyRole($event) {
-        const stateCopy = Object.assign({}, this.state);
-        stateCopy.errors['role'] = false;
-        this.setState({ stateCopy })
-    }
-
-    render() {
-        const { errors } = this.state;
-        let errorPres;
-        if (Object.values(errors).indexOf(true) > -1) {
-            errorPres = true;
-         } else {
-            errorPres = false;
-         }
-
-        return (
-            <>
-                <div 
-                    className={this.state.showForm?'form-wrapper form-shown':'form-wrapper form-hidden'}
-                >
-                    <form noValidate>
-                        <h3>User Registration</h3>
-                        <input onBlur={this.verifyFName} name="fname" onChange={this.onFormChange} placeholder="Firstname"/>
-                        <span className="error">{this.state.errorMessages.fname}</span>
-                        <input onBlur={this.verifyLName} name="lname" onChange={this.onFormChange} placeholder="Lastname"/>
-                        <span className="error">{this.state.errorMessages.lname}</span>
-                        <input onBlur={this.verifyAge} name="age" onChange={this.onFormChange} placeholder="age"/>
-                        <span className="error">{this.state.errorMessages.age}</span>
-                        <div className="role-wrapper">
-                            <span>
-                                <input 
-                                    type="radio" 
-                                    id="creator"
-                                    name="role"
-                                    value="creator"
-                                    onClick={this.verifyRole}
-                                    onChange={this.onFormChange}
-                                />
-                                <label htmlFor="creator">Creator</label>
-                            </span>
-                            <span>
-                                <input 
-                                    type="radio" 
-                                    id="consumer"
-                                    name="role"
-                                    value="consumer"
-                                    onClick={this.verifyRole}
-                                    onChange={this.onFormChange}
-                                />
-                                <label htmlFor="consumer">Consumer</label>
-                            </span>
-                        </div>
-                    </form>
-                    <button disabled={errorPres} className={!errorPres?"button-submit-info":"button-submit-info-disabled"} onClick={this.submitInfo}>Submit Info</button>
+    return (
+          <div className="email-wrapper">
+            <div className="email-top">
+              <h2>Where creators and people come to get fit together.</h2>
+              <form>
+                <div className="input-wrapper">
+                  <input className="email-input" type="text" placeholder="Enter email"></input>
                 </div>
-                <div className={this.state.emailSubmit?"intro-email-form-hidden":"intro-email-form"}>
-                    <input 
-                        placeholder="email"
-                        type="email"
-                        name="email"
-                        autoFocus
-                        onKeyUp={this.verifyEmail}
-                        onChange={this.onEmailChange}
-                    />
-                    <button 
-                        onClick={this.submitEmail}
-                        disabled={!this.state.isEmailValid}
-                        className={this.state.isEmailValid?'valid-email':'invalid-email'}
-                    >
-                        {this.state.showForm?'Sign Up':'Register'}
-                    </button>
+                <div className="input-wrapper">
+                  <h6>We will never share your information.</h6>
                 </div>
-            </>
-        )
-    }
-}
+                <div className="input-wrapper">
+                  <button id="input-button" type="submit">Sign me up</button>
+                </div>
+              </form>
+            </div>
+            <div className="email-bottom">
+              <h3>Or: </h3>
+              <div className="link-container">
+                <ul>
+                  <li><i>{facebookButton}</i></li>
+                  <li><i>{googleButton}</i></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+      );
+  }
+};
+
+/* Login workflow
+1. On succes login, return access token
+2. end acces token to backend to authenticate with google or facebook
+3. on success return JWT token (make expired one once finished) and store as cookie and create user account
+*/
+
+//To do: double check that any error returned immediately logs out user
+// Clean up code and write comments 
+// To do: handle error to logout of everything if goes wrong
