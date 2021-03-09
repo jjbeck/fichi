@@ -27,16 +27,3 @@ html body{
 .hide-overlay{
     opacity: 0; /* Hidden by default */
 }
-button {
-    border: 1px solid var(--main-purple);
-    border-radius: 6px;
-    margin-right: 15px;
-    background: #fff;
-}
-button.filled {
-    background: var(--main-purple);
-    color: #fff;
-}
-button.ghost {
-    color: var(--main-purple);
-}

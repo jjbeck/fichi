@@ -1,11 +1,18 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+
 const { connectToDb } = require('./db.js');
 const { installHandler } = require('./src/handlers/api_handler.js');
+require('./src/auth/auth.js');
+const auth = require('./src/auth/auth.js');
 
 
 const app = express();
+
+app.use(cookieParser());
+
+app.use('/auth', auth.routes);
 
 installHandler(app);
 
