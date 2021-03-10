@@ -2,18 +2,15 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
-const Joi = require('joi');
-const info = require('./info.js');
-const UserAquireDate = require('../resolvers/graphql_date.js');
+const user = require('../controllers/user.controller.js');
 
 const resolvers = {
   Query: {
-    getUserInfo: info.getUserInfo,
+    getUser: user.getUser
   },
   Mutation: {
-    setUserInfo: info.setUserInfo,
-  },
-  UserAquireDate,
+    createUser: user.createUser,
+  }
 };
 
 const server = new ApolloServer({

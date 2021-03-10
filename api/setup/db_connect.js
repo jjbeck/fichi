@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { response } = require('express');
 const mongoose = require('mongoose');
 
 async function connectToDb() {

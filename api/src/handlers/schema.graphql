@@ -2,7 +2,7 @@
 scalar UserAquireDate
 
 """Initial user info schema"""
-type UserInfo {
+type User {
   _id: ID!
   email: String!
   fname: String
@@ -10,7 +10,7 @@ type UserInfo {
   createdAt: String
 }
 
-input SetUSERINFO {
+input createUser {
   email: String!
   fname: String
   lname: String
@@ -21,11 +21,11 @@ input SetUSERINFO {
 ##### Top level declarations
 
 type Query {
-  getUserInfo: [UserInfo!]!
+  getUser: [User!]!
 }
 
 type Mutation {
-  setUserInfo(info: SetUSERINFO!): UserInfo!
+  createUser(info: createUser!): User!
 }
 
 #Make age not required
