@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import HeaderComponent from './components/header/header.component.jsx';
 import IntroContainer from './containers/intro/intro.container.jsx';
@@ -6,6 +8,9 @@ import FooterContainer from './containers/footer/footer.container.jsx';
 import SignupContainer from './containers/signup/signup.container.jsx';
 import './global.css';
 import { withRouter } from 'react-router-dom';
+
+import initFacebookSdk from './components/auth/initFacebookSDK.js'
+import initGoogleSdk from './components/auth/initGoogleSDK.js'
 
 class LandingPage extends React.Component {
   constructor() {
@@ -16,6 +21,12 @@ class LandingPage extends React.Component {
       email: '',
       role: '',
     };
+  }
+
+  async componentDidMount() {
+    await initFacebookSdk();
+    await initGoogleSdk();
+
   }
 
   signedUpChange(email, role) {
