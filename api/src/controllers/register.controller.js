@@ -1,6 +1,5 @@
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
-const axios = require('axios');
 require('dotenv').config();
 require('isomorphic-fetch');
 
@@ -51,33 +50,6 @@ async function authorize(req, res, next) {
           }
         });
       }
-    
-      if (req.body.facebook_token) {
-        const facebookToken = req.body.facebook_token;
-        axios.get(`https://graph.facebook.com/v8.0/me?fields=id%2cfirst_name%2clast_name%2cemail&access_token=${facebookToken}`)
-          .then((response) => {
-            const { data } = response;
-            if (data.error) res.status(400).send({ code: 400, message: data.error.message });
-            const { first_name: fname, last_name: lname, email: retEmail } = data;
-            const credentials = {
-              signedIn: true, fname, lname, email: retEmail,
-            };
-            credentials.facebookAuth = true;
-    
-            const token = jwt.sign(credentials, JWT_SECRET);
-            res.cookie('jwt_facebook', token, { httpOnly: true });
-            res.json(credentials);
-    
-            User.count({ email: retEmail }, (err, count) => {
-              if (err) res.status().send({ message: err });
-              if (count > 0) {
-                console.log('email exists signing in');
-              } else {
-                User.create(credentials);
-              }
-            });
-          });
-      }
 }
 
 async function authenticate(req, res, next) {
@@ -89,7 +61,7 @@ async function authenticate(req, res, next) {
     const credentials = googleToken ? jwt.verify(googleToken, JWT_SECRET) : jwt.verify(facebookToken, JWT_SECRET);
     
     if (credentials.signedIn === false) {
-        res.status(400).send({ message: 'troule signing in user. Please try signing in again.'});
+        res.status(500).send({ message: 'troule signing in user. Please try signing in again.'});
     } else {
         res.status(200).send(credentials);
     }
