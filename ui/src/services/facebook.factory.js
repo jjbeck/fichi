@@ -7,13 +7,14 @@ export default function FacebookFactory(apiEndpoint, response) {
 
   this.signIn = async () => {
       try {
+        
         const response = await fetch(`${apiEndpoint}/signin`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ facebook_token: this.response.accessToken }),
         });
-  
-        if ([400].includes(response.status)) console.log('errrr');
+        console.log(response);
+        if ([400].includes(response.status)) return JSON.parse(await response.text()).message;
         const body = await response.text();
         const result = JSON.parse(body);
         const { signedIn, fname, email } = result;
@@ -21,7 +22,7 @@ export default function FacebookFactory(apiEndpoint, response) {
         this.name = fname;
         this.email = email;
       } catch (error) {
-        console.log(error);
+        return error;
       }      
 
   };
@@ -35,14 +36,14 @@ export default function FacebookFactory(apiEndpoint, response) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
         });
-        if ([400].includes(response.status)) console.log('errrr');
+        if ([400].includes(response.status)) return JSON.parse(await response.text()).message;
         const auth2 = window.gapi.auth2.getAuthInstance();
         const body = await response.text();
         await auth2.signOut();
         this.setState({ signedIn: false });
         console.log(this.state);
       } catch (error) {
-        console.log(error);
+        return error;
       }
     };
 
