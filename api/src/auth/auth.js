@@ -32,13 +32,13 @@ function getUser(req) {
     const credentials = googleToken ? jwt.verify(googleToken, JWT_SECRET) : jwt.verify(facebookToken, JWT_SECRET);
     return credentials;
   } catch (error) {
-    return { signedIn: false };
+    return { errorMessage: error };
   }
 }
 
 routes.post('/signin', async (req, res) => {
   if (!JWT_SECRET) {
-    res.status(500).send('Missing JWT_SECRET. Refusing to authenticate');
+    res.status(500).send({ message: 'Missing JWT_SECRET. Refusing to authenticate' });
   }
 
   if (!req.body.google_token && !req.body.facebook_token) {
@@ -53,7 +53,7 @@ routes.post('/signin', async (req, res) => {
       const ticket = await client.verifyIdToken({ idToken: googleToken });
       payload = ticket.getPayload();
     } catch (error) {
-      res.status(403).send('Invalid Credentials');
+      res.status(403).send({ message: 'Invalid Credentials' });
     }
     const { given_name: fname, family_name: lname, email: retEmail } = payload;
     const credentials = {
@@ -75,6 +75,7 @@ routes.post('/signin', async (req, res) => {
 
   if (req.body.facebook_token) {
     const facebookToken = req.body.facebook_token;
+    
     axios.get(`https://graph.facebook.com/v8.0/me?fields=id%2cfirst_name%2clast_name%2cemail&access_token=${facebookToken}`)
       .then((response) => {
         const { data } = response;
@@ -104,17 +105,19 @@ routes.post('/signin', async (req, res) => {
 routes.post('/user', (req, res) => {
   const user = getUser(req);
 
-  if (user.signedIn === false) {
-    res.status(400).send({ message: 'troule signing in user. Please try signing in again.'});
+
+  if (user.errorMessage) {
+    res.status(400).send({ message: 'trouble signing in user. Please try signing in again.', error: user.errorMessage });
   } else {
     res.send(user);
+
   }
 });
 
 routes.post('/signout', async (req, res) => {
   res.clearCookie('jwt_google');
   res.clearCookie('jwt_facebook');
-  res.json({ status: 'you have signed out user' });
+  res.json({ status: 'You have signed out.' });
 });
 
 routes.post('/deleteaccount', async (req, res) => {
@@ -123,7 +126,7 @@ routes.post('/deleteaccount', async (req, res) => {
   User.deleteOne({ email: req.body.email }, (err) => {
     if (err) res.status(400).send({ code: 400, message: err });
   });
-  res.json({ status: 'you have deleted your account' });
+  res.json({ status: 'You have deleted your account.' });
 });
 
 module.exports = { routes };

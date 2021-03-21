@@ -3,17 +3,6 @@ import SSO from './sso.factory.js';
 export default function GoogleFactory(apiEndpoint) {
   SSO.call(this, apiEndpoint);
 
-  this.getToken = async () => {
-    let googleToken;
-    try {
-      const auth2 = window.gapi.auth2.getAuthInstance();
-      const googleUser = await auth2.signIn();
-      googleToken = googleUser.getAuthResponse().id_token;
-      this.googleToken = googleToken;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   this.signIn = async () => {
 
@@ -24,7 +13,7 @@ export default function GoogleFactory(apiEndpoint) {
       googleToken = googleUser.getAuthResponse().id_token;
       this.googleToken = googleToken;
     } catch (error) {
-      console.log(error);
+      return error;
       }
     
 
@@ -35,7 +24,7 @@ export default function GoogleFactory(apiEndpoint) {
         body: JSON.stringify({ google_token: this.googleToken }),
       });
 
-      if ([400, 403].includes(response.status)) console.log('errrr');
+      if ([400, 403].includes(response.status)) return JSON.parse(await response.text()).message;
       const body = await response.text();
       const result = JSON.parse(body);
       const { signedIn, fname, email } = result;
@@ -43,7 +32,7 @@ export default function GoogleFactory(apiEndpoint) {
       this.name = fname;
       this.email = email;
     } catch (error) {
-      console.log(error);
+      return error;
       // To do: handle error to logout of everything if goes wrong
     }
   };
@@ -55,7 +44,7 @@ export default function GoogleFactory(apiEndpoint) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      if ([400].includes(response.status)) console.log('errrr');
+      if ([400].includes(response.status)) return JSON.parse(await response.text()).message;
       const auth2 = window.gapi.auth2.getAuthInstance();
       const body = await response.text();
       await auth2.signOut();

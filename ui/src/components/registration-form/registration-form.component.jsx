@@ -39,37 +39,66 @@ export default class RegistrationFormContainer extends React.Component {
   }
 
   async componentDidMount() {
-    await ssoSign.loadData()
-    await initGoogleSDK();
-    this.setState({ signedIn: ssoSign.signedIn, email: ssoSign.email, name: ssoSign.name })
+    const response = await ssoSign.loadData();
+    if (response) {
+      toastify(response, 'error');
+    } else {
+      this.setState({ signedIn: ssoSign.signedIn, email: ssoSign.email, name: ssoSign.name })
+    }
+    const authResponse = await initGoogleSDK();
+    if (authResponse) toastify(authResponse, 'error');
   }
 
   async deleteAccount(e) {
     if (e.target.name === 'facebook') {
-      await facebookFactory.deleteAcount(this.state.email).then(() => {this.setState({ signedIn: facebookFactory.signedIn })});
-      console.log(this.state.signedIn);
+      const response = await facebookFactory.deleteAcount(this.state.email);
+      if (response) {
+        toastify(response, 'error');
+      } else {
+        this.setState({ signedIn: facebookFactory.signedIn })
+        toastify('You have deleted your account');
+      }
     } else if (e.target.name === 'google') {
-      googleFactory.deleteAccount(this.state.email).then(() =>{this.setState({ signedIn: googleFactory.signedIn })});
+      const response =  await googleFactory.deleteAccount(this.state.email);
+      if (response) {
+        toastify(response, 'error');
+      } else {
+        this.setState({ signedIn: googleFactory.signedIn });
+        toastify('You have deleted your account');
+      }
     }
   }
 
   async googleSignIn(e) {
-    const { showSuccess } = this.props;  
-    await googleFactory.signIn().then(() => { this.setState({ signedIn: googleFactory.signedIn, email: googleFactory.email, name: googleFactory.name }) }); 
-    toastify('signed in');
+    const { showSuccess } = this.props;
+    const response = await googleFactory.signIn();
+    if (response) {
+      toastify(response, 'error');
+    } else {
+      this.setState({ signedIn: googleFactory.signedIn, email: googleFactory.email, name: googleFactory.name });
+      toastify('You are signed in');
+    }
   }
 
   async SignOut(e) {
     if (e.target.name === 'facebook') {
       await facebookFactory.signOut().then(() => {this.setState({ signedIn: facebookFactory.signedIn })});;
+      toastify('You have signed out');
     } else if (e.target.name === 'google') {
-      googleFactory.signOut().then(() =>{this.setState({ signedIn: googleFactory.signedIn })});;
+      googleFactory.signOut().then(() =>{this.setState({ signedIn: googleFactory.signedIn })});
+      toastify('You have signed out');
     }
   }
 
-  async fbSignIn(response) {
-    const facebookFactory = new FacebookFactory(apiEndpoint, response);
-    facebookFactory.signIn().then(() => {this.setState({ signedIn: facebookFactory.signedIn })});;  
+  async fbSignIn(fbResponse) {
+    const facebookFactory = new FacebookFactory(apiEndpoint, fbResponse);
+    const response = facebookFactory.signIn();
+    if (response) {
+      toastify(response, 'error');
+    } else {
+      this.setState({ signedIn: facebookFactory.signedIn });
+      toastify('You are signed in');
+    } 
 }
 
   emailVal(e) {
