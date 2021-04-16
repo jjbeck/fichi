@@ -34,8 +34,9 @@ export default class EarlyAccessButtonComponent extends React.Component {
             <>
                 <button
                     className="filled"
+                    id="input-button"
                     onClick={this.onclickEvent}
-                >Give me early access</button>
+                >GIVE ME EARLY ACCESS</button>
             </>
         )
     }

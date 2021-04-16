@@ -5,11 +5,11 @@ import 'babel-polyfill'
 import { BrowserRouter as Router } from 'react-router-dom';
 
   
-import LandingPage from './placeHolderLandingPage.jsx';
+import Page from './Page.jsx'
 
 const element = (
   <Router>
-    <LandingPage />
+    <Page />
   </Router>
 );
 

@@ -1,8 +1,10 @@
 .footer-wrapper{
-    width: 100%;
-    background: var(--main-purple);
+    
+    background: var(--main-purple-20);
     color: #fff;
     padding: 10px 5px;
     text-align: center;
-    margin-top: 25px;
+    
+    
+    
 }

@@ -7,14 +7,12 @@ export default class SignupContainer extends React.Component {
         return (
             <>
                 <div className="signup-wrapper">
-                    <p>
+                    <h1 className="sub-header-text" id="signup-form-header">
                     If you would like to receive updates on our launch, access to exlusive content, and early user benefits, enter your email.
-                    </p>
+                    </h1>
                     <p className="button-wrapper">
-                        <EarlyAccessButtonComponent />
-                        <button className="ghost">
-                            Contact Us
-                        </button>
+                        <EarlyAccessButtonComponent id="input-button"/>
+                       
                     </p>
                 </div>
             </>

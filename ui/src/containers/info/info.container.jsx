@@ -1,74 +1,53 @@
 import React from 'react';
 import './info.css';
-import galleryImg from '../../assets/images/gallery.svg';
-import connectImg from '../../assets/images/connect.svg';
-import schedulingImg from '../../assets/images/scheduling.svg';
-import socialImg from '../../assets/images/social.svg';
+import creatorImg from '../../assets/images/2@2x.svg';
+import userImg from '../../assets/images/3@2x.svg';
+import commImg from '../../assets/images/4@2x.svg';
 
 export default class InfoContainer extends React.Component {
     render() {
         return (
             <div className="info-wrapper">
-                <h3>How It Works</h3>
-
                 <div className="steps-wrapper">
                     <div className="img-wrapper">
                         <img 
-                            width="200" 
-                            height="200"
-                            src={socialImg}
+                            className="creatorImg"
+                            src={creatorImg}
                         />
-                        <video width="400" controls>
-                            <source src="mov_bbb.mp4" type="video/mp4" />
-                            <source src="mov_bbb.ogg" type="video/ogg" />
-                            Your browser does not support HTML video.
-                        </video>
-                        <button className="ghost right-align">Learn More</button>
                     </div>
                     
                     <p>
-                        <h3>Share what drives you.</h3>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                        <h1 className="header-text">Share what drives you.</h1>
+                        <h2 className="sub-header-text">You want to make the world a healthier place, and you love motivating people. So we decided to provide the platform. All you have to do is provide the content.</h2>
+
                     </p> 
                 </div>
 
                 <div className="steps-wrapper">
                     <p>
-                        <h3>Find your perfect workout.</h3>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                        <h1 className="header-text">Find your perfect workout.</h1>
+                        <h2 className="sub-header-text">From burpees to push-ups to jazzercise in spandex, you will always find the workout for you. Anytime, any day, anywhere.</h2>
+
                     </p> 
                     <div className="img-wrapper">
                         <img 
-                            width="200" 
-                            height="200"
-                            src={schedulingImg}
+                            className="userImg"
+                            src={userImg}
                         />
-                        <video width="400" controls>
-                            <source src="mov_bbb.mp4" type="video/mp4" />
-                            <source src="mov_bbb.ogg" type="video/ogg" />
-                            Your browser does not support HTML video.
-                        </video>
-                        <button className="ghost left-align">Learn More</button>
                     </div>
                 </div>
 
                 <div className="steps-wrapper">
                     <div className="img-wrapper">
                         <img 
-                            width="200" 
-                            height="200"
-                            src={galleryImg}
+                            className="commImg"
+                            src={commImg}
                         />
-                        <video width="400" controls>
-                            <source src="mov_bbb.mp4" type="video/mp4" />
-                            <source src="mov_bbb.ogg" type="video/ogg" />
-                            Your browser does not support HTML video.
-                        </video>
-                        <button className="ghost right-align">Learn More</button>
+                        
                     </div>
                     <p>
-                        <h3>Join your community and connect with trainers.</h3>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                        <h1 className="header-text">Find your workout buddies.</h1>
+                        <h2 className="sub-header-text">We're all in this together. Subscribe, chat and connect with your community. Get advice straight from the source and share what you've learned. Nothing's better than working out with friends.</h2>
                     </p> 
                 </div>
             </div>

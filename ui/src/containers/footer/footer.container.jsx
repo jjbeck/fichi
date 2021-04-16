@@ -7,6 +7,7 @@ export default class FooterContainer extends React.Component {
         return (
             <div className="footer-wrapper">
                 <div>Copyright &copy;</div>
+                <div>Fichi 2021</div>
             </div>
         )
     }

@@ -1,14 +1,14 @@
 
 .signup-wrapper{
-    background: #F5F5F5;
+    background: var(--main-purple);
+    font-family: var(--title-font);
     display: flex;
-    justify-content: space-around;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding:35px;
 }
-.signup-wrapper p{
-    width: 50%;
-}
-.signup-wrapper .button-wrapper {
+
+#signup-form-header {
     width: 40%;
 }

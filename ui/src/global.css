@@ -1,7 +1,14 @@
 :root {
-    --main-purple: #5844d7;
+    --main-purple: #9c2ad6;
+    --main-purple-20: #b055de;
+    --main-purple-analogous: #8b2ad6;
+    --main-green: #2ad657;
     --main-white: #fff;
-    --main-green: #4ad295;
+    --main-blue: #3b6bf7;
+    --main-magenta: #db3bdd;
+    --title-font: 'Questrial';
+    --paragraph-font: 'Montserrat'
+    
 }
 
 html body{
@@ -27,3 +34,29 @@ html body{
 .hide-overlay{
     opacity: 0; /* Hidden by default */
 }
+
+.header-text {
+    font-family: var(--title-font);
+    font-size: 4vh;
+    line-height: 40px;
+    margin-bottom: 30px;
+
+}
+
+.sub-header-text {
+    font-weight: 400;
+    font-family: var(--paragraph-font), sans-serif;
+    line-height: 40px;
+    text-align: center;
+    font-size: 3vh;
+    margin-bottom: 30px;
+    color: black;
+}
+
+.info-text {
+    font-family: var(--title-font);
+    font-size: 2vh;
+    color: black;
+
+}
+
