@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import  './header.css'
 
 export default class HeaderComponent extends React.Component {
@@ -7,15 +8,14 @@ export default class HeaderComponent extends React.Component {
     }
     render() {
         return (
-            <div className="header">
+            <div className="navbar">
             <div><span>Logo</span></div>
-            <ul className="nav-links">
-                <li className="nav-link-item">About us</li>
-                <li className="nav-link-item">Calendar</li>
-            </ul>
-            <div className="">
-                <span className="avatar">MT</span>
-            </div>
+            <div className="nav-links">
+            <Link className="nav-link-item" to="/calendar">Calendar</Link>
+            <Link className="nav-link-item" to="/welcome">About Us</Link>
+            <Link className="nav-link-item" to="/welcome">Profile</Link>
+           </div>
+            
         </div>
         )
     }

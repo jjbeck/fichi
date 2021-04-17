@@ -1,16 +1,13 @@
 import React from 'react';
 
-import IntroContainer from './containers/intro/intro.container.jsx';
-import InfoContainer from './containers/info/info.container.jsx';
-import FooterContainer from './containers/footer/footer.container.jsx';
-import SignupContainer from './containers/signup/signup.container.jsx';
+import CalendarContaine from './containers/calendar/calendar.container.jsx'
 import './global.css';
 import { withRouter } from 'react-router-dom';
 
 import initFacebookSdk from './components/auth/initFacebookSDK.js'
 import initGoogleSdk from './components/auth/initGoogleSDK.js'
 
-class LandingPage extends React.Component {
+class Calendar extends React.Component {
   constructor() {
     super();
     this.signedUpChange = this.signedUpChange.bind(this);
@@ -39,13 +36,10 @@ class LandingPage extends React.Component {
   render() {
     return (
       <>
-        <IntroContainer />
-        <InfoContainer/>
-        <SignupContainer/>
-        <FooterContainer />
+        <CalendarContaine />
       </>
     )
   }
 };
 
-export default withRouter(LandingPage);
+export default withRouter(Calendar);

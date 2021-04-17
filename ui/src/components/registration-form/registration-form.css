@@ -1,45 +1,30 @@
 
 .email-wrapper {
+    background-color: var(--main-purple);
+    font-family: var(--title-font);
     display: flex;
     justify-content: center;
-    font-family: 'Questrial';
     align-items: center;
     flex-direction: column;
-    background-color: rgba(255,255,255,1);
-    border-radius: 5px;
-    z-index: 1000;
-    box-shadow: 0 30px 30px -5px rgba(0,0,0,0.6), 0 30px 30px -5px rgba(0,0,0,0.6);
+    text-align: center;
     height: 35%;
     width: 25%;
-    margin-top: 5%;
-    margin-bottom: 5%;
 }
 
 .email-top {
-    padding: 40px 40px 40px 20px;
-    width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
-}
-
-
-h2 {
-    font-weight: 550;
-    text-align: center;
-    margin-bottom: 32px;
-    color: #BE22DB;
-}
-
-h6 {
-    font-size: 17px;
-    color: black;
+    align-items: center;
+    
 }
 
 .input-wrapper {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 20px;
+    
 }
 
 input {
@@ -49,6 +34,7 @@ input {
     width: 100%;
     border: none;
     border: 3px solid rgba(0,0,0,0.5);
+    border-radius: 5px;
     transition: 500ms ease all;
     background: none;
 } 
@@ -62,21 +48,21 @@ input {
 
 #input-button {
     cursor: pointer;
-    padding: 15px 60px;
-    border-radius: 15px;
+    padding: 15px 25px;
+    border-radius: 5px;
     font-weight: 600;
     font-size: 17px;
+    width: 100%;
     border: none;
     color: #ffff;
-    background-color: rgba(190, 34, 219, 0.75);
-    margin-right: 16px;
+    background-color: var(--main-purple-analogous);
     transition: 500ms ease all;
 }
 
 input:focus {
     outline: none;
     box-shadow: 0 1px 0 0 purple;
-    border-color: purple;
+    border-color: var(--main-green);
 }
 
 
@@ -89,12 +75,8 @@ input:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     justify-content: center;
-    background-color: rgba(190, 34, 219, 0.6);
-    padding: 60px 40px 40px;
     color: #ffff;
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
 }
 
 .-bottom, h3 {
@@ -103,29 +85,20 @@ input:focus {
     font-weight: 700;
 }
 
-ul {
-    display: flex;
-    flex-direction: column;
-    margin-top: 16px;
-    list-style: none;
-}
-
-li {
-    margin-right: 40px;
-    font-size: 24px;
+.sso-link {
     cursor: pointer;
+    display: inline;
+}
+.sso-link:hover {
+    color: var(--main-green);
+    transform: scale(2);
 }
 
-i {
-    transition: 500ms ease all;
+.email-line {
+    width: 100%;
 }
 
-
-
-i:hover {
+#google-button {
     background-color: black;
-    transform: scale(0.98);
+    height: 100px;
 }
-
-
-

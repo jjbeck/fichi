@@ -1,7 +1,7 @@
 import React from "react";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import FacebookLogin from 'react-facebook-login';
-
+import {createButton} from "react-social-login-buttons";
 import './registration-form.css'
 import graphQLFetch from '../../api_handlers/graphQLFetch.js'
 import initGoogleSDK from '../auth/initGoogleSDK.js';
@@ -91,6 +91,8 @@ export default class RegistrationFormContainer extends React.Component {
   }
 
   async fbSignIn(fbResponse) {
+    console.log('worked');
+    
     const facebookFactory = new FacebookFactory(apiEndpoint, fbResponse);
     const response = facebookFactory.signIn();
     if (response) {
@@ -110,40 +112,42 @@ export default class RegistrationFormContainer extends React.Component {
   
   render() {
     const { classes } = this.props;
-  
+
+    
     let googleButton;
     let facebookButton;
     if (this.state.signedIn === true) {
       googleButton = <><button name="google" onClick={this.SignOut}>sign out</button><button name="google" onClick={this.deleteAccount}>delete</button></>
       facebookButton = <><button name="facebook" onClick={this.SignOut}>sign out</button><button name="facebook" onClick={this.deleteAccount}>delete</button></>
     } else {
-      googleButton = <GoogleLoginButton value="google" onClick={this.googleSignIn}/>
+      googleButton = <GoogleLoginButton styleid="google-button" value="google" onClick={this.googleSignIn}/>
       facebookButton= <FacebookLogin appId={window.ENV.FB_APP_ID} autoLoad={true} callback={this.fbSignIn} onClick={this.fbSignIn} />
     }
 
     return (
           <div className="email-wrapper">
             <div className="email-top">
-              <h2>Where creators and people come to get fit together.</h2>
+              <h1 className="header-text">Where creators and people come to get fit together.</h1>
+              <div className="input-wrapper">
+                  <h2 className="sub-header-text">Fichi is launching soon. Enter your email to recieve an invitation.</h2>
+                </div>
               <form>
                 <div className="input-wrapper">
                   <input className="email-input" type="text" placeholder="Enter email"></input>
                 </div>
                 <div className="input-wrapper">
-                  <h6>We will never share your information.</h6>
+                  <input className="password-input" type="text" placeholder="Enter password"></input>
                 </div>
                 <div className="input-wrapper">
-                  <button id="input-button" type="submit">Sign me up</button>
+                  <button id="input-button" type="submit">GIVE ME EARLY ACCESS</button>
                 </div>
               </form>
+              <hr className="email-line"/>
             </div>
             <div className="email-bottom">
-              <h3>Or: </h3>
-              <div className="link-container">
-                <ul>
-                  <li><i>{facebookButton}</i></li>
-                  <li><i>{googleButton}</i></li>
-                </ul>
+            
+               <div >
+                {googleButton}
               </div>
             </div>
             <ToastContainerCustom />
