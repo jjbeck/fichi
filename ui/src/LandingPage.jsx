@@ -11,35 +11,30 @@ import initFacebookSdk from './components/auth/initFacebookSDK.js'
 import initGoogleSdk from './components/auth/initGoogleSDK.js'
 
 class LandingPage extends React.Component {
-  constructor() {
-    super();
-    this.signedUpChange = this.signedUpChange.bind(this);
+  constructor(props) {
+    super(props);
+    
     this.state = {
       signedUp: false,
       email: '',
-      role: '',
+      userId: '',
     };
   }
 
   async componentDidMount() {
     await initFacebookSdk();
     await initGoogleSdk();
+    
 
   }
 
-  signedUpChange(email, role) {
-    this.setState({ signedUp: true, email: email, role: role })
-    const { history } = this.props;
-
-    history.push({
-      pathname: `/${this.state.role}`,
-    });
-  }
+  
 
   render() {
+    
     return (
       <>
-        <IntroContainer />
+        <IntroContainer onUserChange={this.props.onUserChange} />
         <InfoContainer/>
         <SignupContainer/>
         <FooterContainer />

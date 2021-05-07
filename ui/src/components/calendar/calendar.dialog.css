@@ -1,0 +1,8 @@
+.description {
+    width: 70%;
+}
+
+.MuiDialog-root {
+    font-family: var(--title-font);
+}
+
