@@ -46,18 +46,6 @@ input {
     padding-left: 5px;
 }
 
-#input-button {
-    cursor: pointer;
-    padding: 15px 25px;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 17px;
-    width: 100%;
-    border: none;
-    color: #ffff;
-    background-color: var(--main-purple-analogous);
-    transition: 500ms ease all;
-}
 
 input:focus {
     outline: none;
@@ -65,11 +53,6 @@ input:focus {
     border-color: var(--main-green);
 }
 
-
-#input-button:hover {
-    background-color: black;
-    transform: scale(0.98);
-}
 
 .email-bottom {
     display: flex;

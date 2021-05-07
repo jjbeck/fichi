@@ -4,16 +4,19 @@ require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
 const Joi = require('joi');
 const info = require('./info.js');
-const UserAquireDate = require('../resolvers/graphql_date.js');
+const CalendarDate = require('../resolvers/calendarDate.js');
 
 const resolvers = {
   Query: {
     getUserInfo: info.getUserInfo,
+    getCalendarEvents: info.getCalendarEvents,
   },
   Mutation: {
     setUserInfo: info.setUserInfo,
+    setCalendarEvent: info.setCalendarEvent,
+    setCalendarEventUpdate: info.setCalendarEventUpdate,
   },
-  UserAquireDate,
+  CalendarDate,
 };
 
 const server = new ApolloServer({
