@@ -14,17 +14,14 @@ app.use(cookieParser());
 
 app.use('/auth', auth.routes);
 
+app.get('/', (req, res) => {
+  res.status(200).send({ status: 'OK' });
+});
+
 installHandler(app);
 
-const port = process.env.API_SERVER_PORT || 3000;
+const port = process.env.GRAPHQL_LISTEN_PORT || 8080;
 
-(async function start() {
-  try {
-    await connectToDb();
-    app.listen(port, () => {
-      console.log(`API server started on port ${port}`);
-    });
-  } catch (err) {
-    console.log('ERROR:', err);
-  }
-}());
+app.listen(port, '0.0.0.0', () => {
+  console.log(`GRAPHQL API listening on port ${port}`);
+});

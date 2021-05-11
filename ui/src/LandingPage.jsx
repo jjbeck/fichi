@@ -7,31 +7,25 @@ import SignupContainer from './containers/signup/signup.container.jsx';
 import './global.css';
 import { withRouter } from 'react-router-dom';
 
+
 import initFacebookSdk from './components/auth/initFacebookSDK.js'
 import initGoogleSdk from './components/auth/initGoogleSDK.js'
+
+
+
+
 
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
-    
-    this.state = {
-      signedUp: false,
-      email: '',
-      userId: '',
-    };
   }
 
   async componentDidMount() {
     await initFacebookSdk();
     await initGoogleSdk();
-    
-
   }
 
-  
-
   render() {
-    
     return (
       <>
         <IntroContainer onUserChange={this.props.onUserChange} />

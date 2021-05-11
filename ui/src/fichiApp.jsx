@@ -4,17 +4,22 @@ import 'whatwg-fetch'
 import 'babel-polyfill'
 import { BrowserRouter as Router } from 'react-router-dom';
 
+
   
 import Page from './Page.jsx'
 
-const element = (
-  <Router>
+
+
+
+ReactDOM.render(
+  
+    <Router>
     <Page />
-  </Router>
+  </Router>,
+  document.getElementById('contents'),
+
 );
 
-
-ReactDOM.render(element, document.getElementById('contents'));
 
 if (module.hot) {
   module.hot.accept();

@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -50,6 +51,6 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./public/index.html",
       filename: "./index.html"
-    })
-  ]
+    }),
+  ],
 };

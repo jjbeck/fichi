@@ -43,16 +43,13 @@ export default class Page extends React.Component {
         const user = { signedIn: googleFactory.signedIn, email: '', name: '' };
         this.setState({ user });
         toastify('You have deleted your account');
-      }
-    
+      }  
   }
 
   async signOut(e) {
-    console.log('signed out');
-       
+    console.log('signed out');  
     googleFactory.signOut().then(() =>{this.setState({user: { signedIn: googleFactory.signedIn, name: '', email: '' }})});
     toastify('You have signed out');
-  
 }
   
 
@@ -61,9 +58,7 @@ export default class Page extends React.Component {
   }
 
   render() {
-
     const { user } = this.state;
-
     return (
       <div>
         <UserContext.Provider value={user}>

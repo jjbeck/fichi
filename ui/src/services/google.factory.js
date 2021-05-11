@@ -12,6 +12,7 @@ export default function GoogleFactory(apiEndpoint) {
       const googleUser = await auth2.signIn();
       googleToken = googleUser.getAuthResponse().id_token;
       this.googleToken = googleToken;
+      console.log(googleToken);
     } catch (error) {
       return error;
       }

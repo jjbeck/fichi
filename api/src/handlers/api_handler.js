@@ -1,11 +1,34 @@
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config();
-const { ApolloServer } = require('apollo-server-express');
-const Joi = require('joi');
-const info = require('./info.js');
-const CalendarDate = require('../resolvers/calendarDate.js');
 
+const { ApolloServer } = require('apollo-server-express');
+const { Neo4jGraphQL } = require('@neo4j/graphql');
+const { makeAugmentedSchema } = require('neo4j-graphql-js');
+const neo4j = require('neo4j-driver');
+
+const { typeDefs } = require('./graphql-schema');
+const { resolvers } = require('../resolvers/authentication');
+
+
+const schema = makeAugmentedSchema({
+  typeDefs,
+  resolvers,
+});
+
+require('dotenv').config();
+
+
+// const info = require('./info.js');
+// const CalendarDate = require('../resolvers/calendarDate.js');
+
+const driver = neo4j.driver(
+  process.env.NEO4J_URI || 'bolt://localhost:7687',
+  neo4j.auth.basic(
+    process.env.NEO4J_USER || 'neo4j',
+    process.env.NEO4J_PASSWORD || 'letmein',
+  ),
+);
+
+
+/*
 const resolvers = {
   Query: {
     getUserInfo: info.getUserInfo,
@@ -18,14 +41,17 @@ const resolvers = {
   },
   CalendarDate,
 };
+*/
 
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync(path.resolve(__dirname, './schema.graphql'), 'utf-8'),
-  resolvers,
-  formatError: (error) => {
-    console.log(error);
-    return error;
+  context: ({ req }) => {
+    return {
+      driver,
+      req,
+    };
   },
+  // remove schema and uncomment typeDefs and resolvers above to use original (unaugmented) schema
+  schema,
 });
 
 function installHandler(app) {

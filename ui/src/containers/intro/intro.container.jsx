@@ -18,12 +18,8 @@ class IntroContainer extends React.Component {
         this.googleFactory = new GoogleFactory(apiEndpoint)
         this.emailVal = this.emailVal.bind(this);
         this.googleSignIn = this.googleSignIn.bind(this);
-        
-       
-        
+        this.formSignIn = this.formSignIn.bind(this);  
     }
-
-  
     
       async googleSignIn(e) {
         const { showSuccess } = this.props;
@@ -35,13 +31,12 @@ class IntroContainer extends React.Component {
           this.props.onUserChange(user);
           toastify('You are signed in');
         }
-        
       }
-    
-     
-    
-      
-    
+
+      async formSignIn(e) {
+        e.preventDefault();
+        console.log('submit');
+      }
     
       emailVal(e) {
           const error = emailPattern.test(e.target.value);
@@ -49,15 +44,12 @@ class IntroContainer extends React.Component {
           this.setState({ noError: error });
       }
 
-    render() {
-        
-        
+    render() {   
         return (
             <div id="intro-wrapper">
                     <RegistrationFormContainer
-                    deleteAccount={this.deleteAccount}
                     googleSignIn={this.googleSignIn}
-                    signOut={this.SignOut}
+                    formSignIn={this.formSignIn}
                      />
                     <img 
                             className="intro-img"

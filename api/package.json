@@ -1,11 +1,13 @@
 {
   "name": "fichi_api_v1",
   "version": "1.0.0",
+  "type": "module",
   "description": "Back-end code with MongoDB (to store user information) and graphQL schema (to handle queries). ",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w server -e js,graphql ./server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon -w server ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir public"
   },
   "repository": {
     "type": "git",
@@ -18,8 +20,10 @@
   },
   "homepage": "https://github.com/jjbeck/fichi#readme",
   "dependencies": {
+    "@neo4j/graphql": "^1.0.0-beta.2",
     "apollo-server-express": "^2.19.2",
     "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
@@ -27,16 +31,15 @@
     "express": "^4.17.1",
     "fetch": "^1.1.0",
     "google-auth-library": "^2.0.2",
-    "graphql": "^0.13.2",
+    "graphql": "^15.5.0",
     "isomorphic-fetch": "^3.0.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.16",
-    "nodemon": "^1.19.4",
-    "passport": "^0.4.1",
-    "passport-google-oauth": "^2.0.0",
-    "passport-google-oauth20": "^2.0.0"
+    "neo4j-driver": "^4.0.2",
+    "neo4j-graphql-js": "^2.19.2",
+    "nodemon": "^1.19.4"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

@@ -3,30 +3,23 @@ scalar UserAquireDate
 scalar CalendarDate
 
 ##### Initial user info schema
-type UserInfo {
+type User {
   _id: ID!
+  username: String
+  password: String
+  id: String!
   email: String!
   fname: String
   lname: String
-  createdAt: String
-}
-
-input SetUSERINFO {
-  email: String!
-  fname: String
-  lname: String
+  age: Int
   createdAt: String
 }
 
 ###### Initial event user schema
-input Props {
-  ownerId: String!
-  movements: String!
-}
-
 type outputProps {
   ownerId: String!
   movements: String!
+  description: String
 }
 
 type CalendarEvent {
@@ -38,33 +31,22 @@ type CalendarEvent {
   extendedProps: [outputProps!]!
 }
 
-input SetCALENDAREVENT {
-  title: String!
-  start: CalendarDate!
-  end: CalendarDate!
-  display: String!
-  extendedProps: [Props!]!
+###### Initial regstration/authorization schema
+type AuthToken {
+  token: String!
 }
 
-input CalendarEventUpdate {
-  title: String
-  start: CalendarDate
-  end: CalendarDate
-  display: String
-  extendedProps: [Props]
-}
+
 
 ##### Top level declarations
 
 type Query {
-  getUserInfo: [UserInfo!]!
-  getCalendarEvents: [CalendarEvent!]!
+  currentUser: User @cypher( statement: "Match (u:UserInfo {fname: 'jordan'}) return u")
+  events: [CalendarEvent]
 }
 
 type Mutation {
-  setUserInfo(info: SetUSERINFO!): UserInfo!
-  setCalendarEvent(event: SetCALENDAREVENT!): CalendarEvent!
-  setCalendarEventUpdate(_id: String!, changes: CalendarEventUpdate!): CalendarEvent!
+  signup(email: String!, password: String!): AuthToken
+  login(email: String!, password: String!): AuthToken
+  googleSignup(type: String): AuthToken
 }
-
-#Make age not required

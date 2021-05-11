@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const axios = require('axios');
 require('dotenv').config();
 require('isomorphic-fetch');
+const neo4j = require('neo4j-driver')
 
 const { User } = require('../models/user.js');
 

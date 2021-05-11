@@ -1,7 +1,6 @@
 import React from "react";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { LinkContainer } from 'react-router-bootstrap';
-import FacebookLogin from 'react-facebook-login';
 import './registration-form.css'
 import ToastContainerCustom from '../toast/toastcontainer.jsx';
 
@@ -15,7 +14,7 @@ class RegistrationFormContainer extends React.Component {
    
   render() {
     const user = this.context;
-    const { deleteAccount, googleSignIn, signOut } = this.props;
+    const { googleSignIn } = this.props;
 
     
     let googleButton;
@@ -48,7 +47,7 @@ class RegistrationFormContainer extends React.Component {
               <div className="input-wrapper">
                   <h2 className="sub-header-text">Fichi is launching soon. Enter your email to recieve an invitation.</h2>
                 </div>
-              <form>
+              <form onSubmit={this.props.formSignIn}>
                 <div className="input-wrapper">
                   <input className="email-input" type="text" placeholder="Enter email"></input>
                 </div>
