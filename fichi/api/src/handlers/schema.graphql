@@ -1,0 +1,126 @@
+##### Custom scalar for user aquire date
+scalar UserAquireDate
+scalar CalendarDate
+
+##### Initial query schemas
+type User {
+  _id: ID!
+  username: String
+  password: String 
+  id: String!
+  email: String!
+  fname: String
+  lname: String
+  age: Int
+}
+
+type Event {
+    title: String!,
+    start: CalendarDate!,
+    end: CalendarDate!,
+    display: String!,
+    artwork: String,
+    ownerId: String,
+    movements: String!,
+    description: String,
+}
+
+type Playlist {
+  id: String!
+  name: String
+  events: [Event] @relation(name: "IN_PLAYLIST", direction: IN)
+  subscribers: [User] @relation(name: "SAVED_PLAYLIST", direction: IN)
+}
+
+###### Initial regstration/authorization schema
+type AuthToken {
+  token: String!
+  id: String!,
+  email: String!
+} 
+
+
+##### Top level declarations
+
+type Query {
+  currentUser: User @cypher( statement: "Match (u:UserInfo {fname: 'jordan'}) return u")
+}
+
+type Mutation {
+  signup(email: String!, password: String!): AuthToken
+  login(email: String!, password: String!): AuthToken
+  
+
+  #### Calendar Relations
+  createcalendarevent(
+    title: String!,
+    start: CalendarDate!,
+    end: CalendarDate!,
+    display: String!,
+    artwork: String,
+    movements: String!,
+    description: String,
+  ): Event
+  
+  subsribetoevent(id: String!): Event
+  @cypher(
+    statement: """
+    MATCH (u:User {id: $cypherParams.userId})
+    MATCH (c:CalendarEvent {id: $id})
+    MERGE (u)-[:BOOKED]->(c)
+    RETURN c
+    """
+  )
+
+  #### User Relations
+
+  subscribetouser(userId: String!): User
+  @cypher(
+    statement: """
+    MATCH (u:User {id: $cypherParams.userId})
+    MATCH (otherU:User {id: $userId})
+    MERGE (u)-[:SUBSCRIBES_TO]->(otherU)
+    RETURN u
+    """
+  )
+
+  #### Playlist Relations
+  createplaylist(name: String!): Playlist
+  @cypher(
+    statement: """
+    MATCH (u:User {id: $cypherParams.userId})
+    CREATE (p:Playlist {name: $name, id: randomUUID()})
+    MERGE (u)-[:OWNS]->(p)
+    RETURN p
+    """
+  )
+
+  addeventtoplaylist(calendarEventId: String!, name: String!): Playlist
+  @cypher(
+    statement: """
+    MATCH (u:User {id: $cypherParams.userId})-[:OWNS]->(p:Playlist {name: $name})
+    MATCH (c:CalendarEvent {id: $calendarEventId})
+    MATCH (eventOwner:User)-[:CREATED_BY]->(c) 
+    MERGE (c)-[:IN_PLAYLIST]->(p)
+    MERGE (p)-[:HAS_CREATOR]->(eventOwner)
+    RETURN p
+    """
+  )
+
+  saveplaylist(playlistId: String!): Playlist
+  @cypher(
+    statement: """
+    MATCH (u:User {id: $cypherParams.userId})
+    MATCH (p:Playlist {id: $playlistId})
+    MERGE (u)-[:SAVED_PLAYLIST]->(p)
+    RETURN p
+    """
+  )
+
+  #### HAS_CREATOR, and then add cypehr queries fr obtaining info. 
+
+ 
+
+
+  
+}

@@ -1,0 +1,102 @@
+:root {
+    --main-purple: #9c2ad6;
+    --main-purple-20: #b055de;
+    --main-purple-analogous: #8b2ad6;
+    --main-green: #2ad657;
+    --main-white: #fff;
+    --main-blue: #3b6bf7;
+    --main-magenta: #db3bdd;
+    --title-font: 'Questrial';
+    --paragraph-font: 'Montserrat'
+    
+}
+
+html body{
+    margin: 0px;
+    padding: 0px;
+  
+}
+
+.page {
+    display: grid;
+    grid-template-columns: auto auto;
+
+}
+
+
+
+
+.contents {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+   
+}
+
+
+
+
+
+.overlay {
+    position: fixed; /* Sit on top of the page content */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+.show-overlay{
+    opacity: 1; 
+}
+.hide-overlay{
+    opacity: 0; /* Hidden by default */
+}
+
+.header-text {
+    font-family: var(--title-font);
+    font-size: 4vh;
+    line-height: 40px;
+    margin-bottom: 30px;
+
+}
+
+.sub-header-text {
+    font-weight: 400;
+    font-family: var(--paragraph-font), sans-serif;
+    line-height: 40px;
+    text-align: center;
+    font-size: 3vh;
+    margin-bottom: 30px;
+    color: black;
+}
+
+.info-text {
+    font-family: var(--title-font);
+    font-size: 2vh;
+    color: black;
+
+}
+
+
+#input-button {
+    cursor: pointer;
+    padding: 15px 25px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 17px;
+    width: 100%;
+    border: none;
+    color: #ffff;
+    background-color: var(--main-purple-analogous);
+    transition: 500ms ease all;
+}
+
+#input-button:hover {
+    background-color: black;
+    transform: scale(0.98);
+}
+
