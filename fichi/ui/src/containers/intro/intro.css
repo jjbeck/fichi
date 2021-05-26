@@ -1,0 +1,24 @@
+#intro-wrapper{
+    background-color: var(--main-purple);
+    position: relative;
+    font-weight: 400;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+}
+
+
+.intro-img {
+
+    margin-left: 13%;
+    height: 75vh;
+   
+    margin-bottom: 3%;
+
+}

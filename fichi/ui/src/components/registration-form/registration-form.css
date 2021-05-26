@@ -1,0 +1,105 @@
+
+.email-wrapper {
+    background-color: var(--main-purple);
+    font-family: var(--title-font);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 35%;
+    width: 25%;
+}
+
+.email-top {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.input-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+   
+}
+
+.input-warning {
+    display: flex;
+    visibility: visible;
+    justify-content: flex-start;
+    color: var(--main-green);
+    
+}
+.input-warning-hide {
+    visibility: hidden;
+}
+
+input {
+    font-size: 20px;
+    font-weight: 500;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border: 3px solid rgba(0,0,0,0.5);
+    border-radius: 5px;
+    transition: 500ms ease all;
+    background: none;
+} 
+
+
+
+::placeholder {
+    color: black;
+    padding-left: 5px;
+}
+
+
+input:focus {
+    outline: none;
+    box-shadow: 0 1px 0 0 purple;
+    border-color: var(--main-green);
+}
+
+
+.email-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ffff;
+}
+
+.-bottom, h3 {
+    color: #ffff;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sso-link {
+    cursor: pointer;
+    display: inline;
+}
+.sso-link:hover {
+    color: var(--main-green);
+    transform: scale(2);
+}
+
+.email-line {
+    width: 100%;
+}
+
+#google-button {
+    background-color: black;
+    height: 100px;
+}
+
+.input-button1 {
+    margin-right: 10px;
+}
+
+.input-button2 {
+    margin-left: 10px;
+}

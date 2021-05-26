@@ -1,0 +1,14 @@
+
+.signup-wrapper{
+    background: var(--main-purple);
+    font-family: var(--title-font);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding:35px;
+}
+
+#signup-form-header {
+    width: 40%;
+}
